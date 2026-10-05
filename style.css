@@ -1,11 +1,11 @@
 /* Spalvos ir šriftai iš context/stilius.md. Fonas visada kreminis, todėl tamsios versijos nėra. */
 :root {
-  --zalia: #12614a;
+  --zalia: #0b4d3a;
   --kremine: #efe6dd;
   --juoda: #0e0d0d;
-  --oranzine: #f78a09;
+  --oranzine: #e07b06;
   --balta: #ffffff;
-  --linija: rgba(18, 97, 74, 0.2);
+  --linija: rgba(11, 77, 58, 0.2);
 
   --antrastes: "Bebas Neue", Impact, sans-serif;
   --tekstas: "Poppins", "Segoe UI", sans-serif;
@@ -64,7 +64,7 @@ a { color: inherit; }
   white-space: nowrap;
   transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.25s;
 }
-.mygtukas:hover { transform: translateY(-2px); background: #ff9a1f; }
+.mygtukas:hover { transform: translateY(-2px); background: #ee8a12; }
 .mygtukas:active { transform: translateY(1px) scale(0.98); }
 .mygtukas--mazas { min-height: 38px; padding: 0 1.1rem; font-size: 0.85rem; }
 .mygtukas--kontūras {
@@ -131,7 +131,7 @@ section[id] { scroll-margin-top: calc(var(--juostos-aukstis) + 12px); }
   position: absolute;
   inset: 0;
   background:
-    linear-gradient(to top, rgba(18, 97, 74, 0.92) 0%, rgba(18, 97, 74, 0.55) 38%, rgba(18, 97, 74, 0) 70%),
+    linear-gradient(to top, rgba(11, 77, 58, 0.92) 0%, rgba(11, 77, 58, 0.55) 38%, rgba(11, 77, 58, 0) 70%),
     linear-gradient(to right, rgba(14, 13, 13, 0.35), rgba(14, 13, 13, 0) 60%);
 }
 .herojus__turinys {
@@ -235,7 +235,7 @@ section[id] { scroll-margin-top: calc(var(--juostos-aukstis) + 12px); }
   gap: 0.45rem;
   padding: 14px 14px 22px;
   border-radius: var(--kampas);
-  background: rgba(18, 97, 74, 0.07);
+  background: rgba(11, 77, 58, 0.07);
 }
 .darbas h3 {
   margin-top: 0.7rem;
@@ -486,6 +486,14 @@ section[id] { scroll-margin-top: calc(var(--juostos-aukstis) + 12px); }
   padding-top: 0.08em;
 }
 .kaina__prieiga { font-weight: 600; font-size: 1.1rem; margin-bottom: 0.6rem; }
+.kaina__gauni { list-style: none; padding: 0; margin: 0 0 1.6rem; display: grid; gap: 0.6rem; }
+.kaina__gauni li { position: relative; padding-left: 1.5rem; }
+.kaina__gauni li::before {
+  content: "";
+  position: absolute; left: 0; top: 0.6em;
+  width: 9px; height: 9px;
+  background: var(--oranzine);
+}
 .kaina__vidus > p:not([class]) { margin-bottom: 1.6rem; opacity: 0.92; }
 
 .gidas {
