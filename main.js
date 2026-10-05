@@ -68,3 +68,38 @@ if (orbita && !ramiai && 'IntersectionObserver' in window) {
   }, { rootMargin: '300px' });
   stebetojas.observe(orbita);
 }
+
+// ---- Robotukai: vienas šablonas, kiekvienas gauna savo dydį ir šuolio ritmą ----
+const sablonas = document.getElementById('robotukas');
+document.querySelectorAll('[data-robotukai]').forEach(vieta => {
+  const kiek = Number(vieta.dataset.robotukai) || 3;
+  const ritmai = [1.02, 0.88, 1.15, 0.95, 1.24];
+  const dydziai = [1, 0.72, 0.9, 0.64, 0.82];
+  for (let i = 0; i < kiek; i++) {
+    const bot = sablonas.content.firstElementChild.cloneNode(true);
+    bot.style.setProperty('--trukme', ritmai[i % ritmai.length] + 's');
+    bot.style.setProperty('--vel', (i * 0.23) + 's');
+    if (!vieta.classList.contains('robotukai--mazi')) {
+      bot.style.setProperty('--w', Math.round(52 * dydziai[i % dydziai.length]) + 'px');
+    }
+    vieta.appendChild(bot);
+  }
+});
+
+// ---- Visa atsiliepimo žinutė atsidaro lange ----
+const langas = document.querySelector('.zinute');
+if (langas) {
+  const vaizdas = langas.querySelector('img');
+  document.querySelectorAll('[data-zinute]').forEach(mygtukas => {
+    mygtukas.addEventListener('click', () => {
+      vaizdas.src = mygtukas.dataset.zinute;
+      vaizdas.width = mygtukas.dataset.w;
+      vaizdas.height = mygtukas.dataset.h;
+      langas.showModal();
+      langas.scrollTop = 0;
+    });
+  });
+  langas.querySelector('.zinute__uzdaryti').addEventListener('click', () => langas.close());
+  // paspaudus šalia žinutės, langas užsidaro
+  langas.addEventListener('click', e => { if (e.target === langas) langas.close(); });
+}

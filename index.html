@@ -4,10 +4,10 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Anksčiau reikėjo mokėti viską | @deimante_living</title>
-<meta name="description" content="Sąskaitos, karuselės, automatinės žinutės ir net ši svetainė. Viską padariau su Claude Code, be programavimo žinių.">
+<meta name="description" content="Sąskaitos, karuselės, automatinės žinutės ir net ši svetainė. Viską padariau su Claude Code: pasakau paprastais žodžiais, ko noriu, o jis padaro.">
 <meta name="theme-color" content="#12614a">
 <meta property="og:title" content="Anksčiau reikėjo mokėti viską. Dabar man užtenka vieno įrankio.">
-<meta property="og:description" content="Tikri darbai, padaryti su Claude Code be programavimo žinių. @deimante_living">
+<meta property="og:description" content="Tikri darbai, padaryti su Claude Code. Mokymai ir individualios konsultacijos. @deimante_living">
 <meta property="og:image" content="media/portretas.jpg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -17,6 +17,13 @@
 <body>
 
 <header class="juosta">
+  <a class="juosta__vardas" href="#">DEIMANTE_LIVING</a>
+  <nav class="juosta__meniu" aria-label="Pagrindinis meniu">
+    <a href="#darbai">Darbai</a>
+    <a href="#atsiliepimai">Atsiliepimai</a>
+    <a href="#mokymai">Mokymai</a>
+    <a href="#konsultacija">Konsultacija</a>
+  </nav>
   <a class="mygtukas mygtukas--mazas" href="https://stan.store/deimante_living/p/tavo-antroji-deinioji-ranka" target="_blank" rel="noopener">Noriu išmokti ir aš</a>
 </header>
 
@@ -31,7 +38,7 @@
 
     <div class="herojus__turinys">
       <h1 id="antraste" class="herojus__antraste" data-rasyti>Anksčiau reikėjo mokėti viską. Dabar man užtenka vieno įrankio.</h1>
-      <p class="herojus__tekstas">Sąskaitos, karuselės, automatinės žinutės ir net ši svetainė. Viską padariau su Claude Code, be programavimo žinių 🫶</p>
+      <p class="herojus__tekstas">Sąskaitos, karuselės, automatinės žinutės ir net ši svetainė. Pasakau Claude Code paprastais lietuviškais žodžiais, ko noriu, o visa kita jis padaro pats 🫶</p>
       <a class="mygtukas" href="https://stan.store/deimante_living/p/tavo-antroji-deinioji-ranka" target="_blank" rel="noopener">Noriu išmokti ir aš</a>
     </div>
   </section>
@@ -42,15 +49,15 @@
       <img src="media/portretas.jpg" width="928" height="1152" alt="Deimantė tamsiai žaliu kostiumu sėdi ant kėdės žalioje studijoje" loading="lazy">
     </figure>
     <div class="apie__tekstas">
-      <p class="mintis">Aš ne programuotoja ir jokio kodo nemoku.</p>
-      <p class="apie__sakinys">Esu Deimantė. Turinio kūrėja, mokytoja ir vienintelė savo verslo darbuotoja 😀</p>
-      <p class="apie__sakinys"><strong>Anksčiau:</strong> tekstai, dizainas, sąskaitos ir marketingas ant mano galvos, o laiko tik nuo 9 iki 15.</p>
-      <p class="apie__sakinys"><strong>Dabar:</strong> aš pasakau, ko noriu, Claude Code padaro, aš peržiūriu. Būtent to ir mokau kitus, gyvai per Zoom ir Skool platformoje.</p>
+      <p class="mintis">Man nebereikia visko mokėti. Užtenka žinoti, ko noriu.</p>
+      <p class="apie__sakinys">Esu Deimantė Baltrušienė. Turinio kūrėja, mokytoja ir vienintelė savo verslo darbuotoja 😀</p>
+      <p class="apie__sakinys"><strong>Anksčiau:</strong> kiekvienam darbui reikėjo daug žinoti ir daug mokėti. Tekstai, dizainas, sąskaitos ir marketingas gulė ant mano galvos, o laiko turėjau tik nuo 9 iki 15.</p>
+      <p class="apie__sakinys"><strong>Dabar:</strong> paprastais lietuviškais žodžiais pasakau, ko noriu, Claude Code padaro, o aš peržiūriu. Būtent to ir mokau kitus.</p>
     </div>
   </section>
 
   <!-- 2. Vitrina -->
-  <section class="vitrina" aria-labelledby="vitrina-antraste">
+  <section class="vitrina" id="darbai" aria-labelledby="vitrina-antraste">
     <div class="vitrina__galva">
       <h2 id="vitrina-antraste" class="antraste">Štai ką padariau</h2>
       <p class="vitrina__ivadas">Ne pažadai. Tikri darbai iš mano kasdienybės.</p>
@@ -107,51 +114,56 @@
       </article>
 
       <article class="darbas darbas--svetaine">
-        <p class="darbas__didelis">Ir ši svetainė.</p>
-        <p>Ją irgi padarė Claude Code. Man tereikėjo pasakyti, ko noriu 🤭</p>
+        <div>
+          <p class="darbas__didelis">Ir ši svetainė.</p>
+          <p>Ją irgi padarė Claude Code. Man tereikėjo pasakyti, ko noriu 🤭</p>
+        </div>
+        <div class="robotukai" data-robotukai="5" aria-hidden="true"></div>
       </article>
     </div>
   </section>
 
   <!-- 3. Atsiliepimai -->
-  <section class="atsiliepimai" aria-labelledby="atsiliepimai-antraste">
-    <h2 id="atsiliepimai-antraste" class="antraste">Jos irgi galvojo, kad čia ne joms</h2>
+  <section class="atsiliepimai" id="atsiliepimai" aria-labelledby="atsiliepimai-antraste">
+    <div class="atsiliepimai__vidus">
+      <h2 id="atsiliepimai-antraste" class="antraste">Jos irgi galvojo, kad čia ne joms</h2>
 
-    <div class="atsiliepimai__stulpai">
-      <figure class="atsiliepimas">
-        <blockquote class="mintis">„Aš tikrai nesuprantu programavimo, bet jau darau stebuklus!“</blockquote>
-        <img src="media/atsiliepimai/IMG_5080.jpg" width="720" height="948" alt="Žinutės ekrano nuotrauka su visu atsiliepimu" loading="lazy">
+      <figure class="citata">
+        <blockquote class="citata__tekstas">„Patys geriausi pinigai, kuriuos galėjau išleisti.“</blockquote>
+        <figcaption class="citata__po">Po mokymų atsirado dar viena pora rankų ir dar viena galva.</figcaption>
+        <button class="atsiliepimas__atidaryti" type="button" data-zinute="media/atsiliepimai/IMG_5635.jpg" data-w="720" data-h="901">Skaityti visą žinutę</button>
       </figure>
-      <figure class="atsiliepimas">
-        <blockquote class="mintis">„Iš pirmos karuselės, kurią kūriau su Claude, ji man uždirbo 1500 €“</blockquote>
-        <img src="media/atsiliepimai/IMG_4296.jpg" width="720" height="715" alt="Žinutės ekrano nuotrauka su visu atsiliepimu" loading="lazy">
-      </figure>
-      <figure class="atsiliepimas">
-        <blockquote class="mintis">„Per du su puse mėnesio padariau daugiau nei anksčiau per pusmetį“</blockquote>
-        <img src="media/atsiliepimai/IMG_4340.jpg" width="720" height="722" alt="Žinutės ekrano nuotrauka su visu atsiliepimu" loading="lazy">
-      </figure>
-      <figure class="atsiliepimas">
-        <blockquote class="mintis">„Atrodo, lyg būčiau programuotoja, nors tokia tikrai nesu“</blockquote>
-        <img src="media/atsiliepimai/IMG_4301.jpg" width="720" height="405" alt="Žinutės ekrano nuotrauka su visu atsiliepimu" loading="lazy">
-      </figure>
-      <figure class="atsiliepimas">
-        <blockquote class="mintis">„Per penkias minutes jis rado priežastį… Pati tikrai nebūčiau to atradusi“</blockquote>
-        <img src="media/atsiliepimai/IMG_4303.jpg" width="720" height="784" alt="Žinutės ekrano nuotrauka su visu atsiliepimu" loading="lazy">
-      </figure>
+
+      <div class="atsiliepimai__tinklelis">
+        <figure class="atsiliepimas">
+          <blockquote class="mintis">„Aš tikrai nesuprantu programavimo, bet jau darau stebuklus!“</blockquote>
+          <button class="atsiliepimas__atidaryti" type="button" data-zinute="media/atsiliepimai/IMG_5080.jpg" data-w="720" data-h="948">Skaityti visą žinutę</button>
+        </figure>
+        <figure class="atsiliepimas">
+          <blockquote class="mintis">„Iš pirmos karuselės, kurią kūriau su Claude, ji man uždirbo 1500 €“</blockquote>
+          <button class="atsiliepimas__atidaryti" type="button" data-zinute="media/atsiliepimai/IMG_4296.jpg" data-w="720" data-h="715">Skaityti visą žinutę</button>
+        </figure>
+        <figure class="atsiliepimas">
+          <blockquote class="mintis">„Per du su puse mėnesio padariau daugiau nei anksčiau per pusmetį“</blockquote>
+          <button class="atsiliepimas__atidaryti" type="button" data-zinute="media/atsiliepimai/IMG_4340.jpg" data-w="720" data-h="722">Skaityti visą žinutę</button>
+        </figure>
+        <figure class="atsiliepimas">
+          <blockquote class="mintis">„Per penkias minutes jis rado priežastį. Pati tikrai nebūčiau to atradusi“</blockquote>
+          <button class="atsiliepimas__atidaryti" type="button" data-zinute="media/atsiliepimai/IMG_4303.jpg" data-w="720" data-h="784">Skaityti visą žinutę</button>
+        </figure>
+      </div>
+
+      <a class="mygtukas mygtukas--sviesus" href="https://atsiliepimai-claude-code.vercel.app/" target="_blank" rel="noopener">Daugiau atsiliepimų iš mokymų</a>
     </div>
-
-    <a class="mygtukas mygtukas--kontūras" href="https://atsiliepimai-claude-code.vercel.app/" target="_blank" rel="noopener">Atsiliepimai iš mokymų gyvai</a>
   </section>
 
-  <!-- 3 ir 4 jungtis: stipriausias atsiliepimas -->
-  <section class="citata" aria-label="Atsiliepimas apie mokymus">
-    <blockquote class="citata__tekstas">„Patys geriausi pinigai, kuriuos galėjau išleisti.“</blockquote>
-    <p class="citata__po">Po mokymų atsirado dar viena pora rankų ir dar viena galva.</p>
-    <img class="citata__foto" src="media/atsiliepimai/IMG_5635.jpg" width="720" height="901" alt="Žinutės ekrano nuotrauka su visu atsiliepimu" loading="lazy">
-  </section>
+  <dialog class="zinute" aria-label="Visa žinutė">
+    <img alt="Žinutės ekrano nuotrauka su visu atsiliepimu" src="" width="720" height="900">
+    <button class="zinute__uzdaryti" type="button" aria-label="Uždaryti">×</button>
+  </dialog>
 
   <!-- 4. Mokymai ir kvietimas -->
-  <section class="mokymai" aria-labelledby="mokymai-antraste">
+  <section class="mokymai" id="mokymai" aria-labelledby="mokymai-antraste">
     <div class="mokymai__kaire">
       <h2 id="mokymai-antraste" class="antraste">Tavo antroji dešinioji ranka</h2>
       <p class="mokymai__ivadas">Po mokymų įvaldysi vieną iš galingiausių AI įrankių, kokie šiandien yra. Ne teoriškai, o savo kompiuteryje, savo darbams.</p>
@@ -170,6 +182,7 @@
         <li>Turinio kūrėjams</li>
         <li>Vizualai su AI</li>
         <li>Savos svetainės ir įrankiai</li>
+        <li>Reels montažas</li>
       </ol>
     </div>
 
@@ -189,11 +202,56 @@
     </div>
   </section>
 
+  <!-- 5. Konsultacija -->
+  <section class="konsultacija" id="konsultacija" aria-labelledby="konsultacija-antraste">
+    <div class="konsultacija__vidus">
+      <div class="konsultacija__tekstas">
+        <p class="zyma">Individuali konsultacija</p>
+        <h2 id="konsultacija-antraste" class="antraste">Vienas ant vieno, prie tavo darbo</h2>
+        <p class="konsultacija__ivadas">Susėdam ir žiūrim į tai, ką tu darai kasdien. Parodau, kaip Claude Code pritaikyti būtent tavo užduotims, žingsnis po žingsnio ir be techninio žargono.</p>
+        <ul class="konsultacija__sarasas">
+          <li>Randam, kurie darbai tau atima daugiausiai laiko.</li>
+          <li>Parodau, kaip juos perduoti Claude Code paprastais žodžiais.</li>
+          <li>Išeini su aiškiu planu, nuo ko pradėti.</li>
+        </ul>
+      </div>
+      <aside class="konsultacija__kaina" aria-label="Konsultacijos kaina">
+        <div class="robotukai robotukai--mazi" data-robotukai="3" aria-hidden="true"></div>
+        <p class="konsultacija__suma">150 €</p>
+        <p class="konsultacija__laikas">už valandą</p>
+        <a class="mygtukas" href="mailto:deimante.baltrusiene@gmail.com?subject=Konsultacija">Noriu konsultacijos</a>
+        <p class="konsultacija__klausimai">Kilo klausimų? Parašyk man el. paštu <a href="mailto:deimante.baltrusiene@gmail.com">deimante.baltrusiene@gmail.com</a>. Atsakau pati.</p>
+      </aside>
+    </div>
+  </section>
+
 </main>
 
 <footer class="apacia">
-  <a href="https://www.instagram.com/deimante_living/" target="_blank" rel="noopener">@deimante_living</a>
+  <div class="apacia__vidus">
+    <p class="apacia__antraste">Parašyk, jei nori dirbti kartu</p>
+    <p>Mokymai, konsultacija ar tiesiog klausimas, nuo ko pradėti.</p>
+    <div class="apacia__nuorodos">
+      <a class="mygtukas mygtukas--sviesus" href="mailto:deimante.baltrusiene@gmail.com">deimante.baltrusiene@gmail.com</a>
+      <a class="mygtukas mygtukas--sviesus" href="https://www.instagram.com/deimante_living/" target="_blank" rel="noopener">Instagram</a>
+    </div>
+    <p class="apacia__parasas">DEIMANTE_LIVING · © 2026 Deimantė Baltrušienė</p>
+  </div>
 </footer>
+
+<template id="robotukas">
+  <span class="bot">
+    <span class="bot__seselis"></span>
+    <svg class="bot__kunas" viewBox="0 0 22 18" fill="none">
+      <rect x="0" y="5" width="3" height="4" fill="#c8724c"/>
+      <rect x="19" y="5" width="3" height="4" fill="#c8724c"/>
+      <rect x="5" y="12" width="4" height="6" fill="#c8724c"/>
+      <rect x="13" y="12" width="4" height="6" fill="#c8724c"/>
+      <rect x="3" y="1" width="16" height="11" fill="#f78a09"/>
+      <g class="bot__akys" fill="#0e0d0d"><rect x="6" y="4" width="3" height="3"/><rect x="13" y="4" width="3" height="3"/></g>
+    </svg>
+  </span>
+</template>
 
 <script src="main.js"></script>
 </body>

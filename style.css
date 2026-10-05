@@ -73,6 +73,20 @@ a { color: inherit; }
   box-shadow: inset 0 0 0 2px var(--zalia);
 }
 .mygtukas--kontūras:hover { background: var(--zalia); color: var(--balta); }
+.mygtukas--sviesus {
+  background: transparent;
+  color: var(--kremine);
+  box-shadow: inset 0 0 0 2px rgba(239, 230, 221, 0.6);
+}
+.mygtukas--sviesus:hover { background: var(--kremine); color: var(--juoda); }
+.zyma {
+  margin-bottom: 1rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--oranzine);
+}
 
 /* ---------- Viršutinė juosta ---------- */
 .juosta {
@@ -82,13 +96,17 @@ a { color: inherit; }
   height: var(--juostos-aukstis);
   display: flex;
   align-items: center;
-  justify-content: flex-end;
-  gap: 1rem;
+  justify-content: space-between;
+  gap: 1.5rem;
   padding: 0 var(--krastas);
   background: var(--zalia);
   color: var(--balta);
 }
-.juosta__vardas { font-weight: 600; font-size: 0.95rem; text-decoration: none; letter-spacing: 0.02em; }
+.juosta__vardas { font-weight: 600; font-size: 0.9rem; text-decoration: none; letter-spacing: 0.06em; }
+.juosta__meniu { display: flex; gap: clamp(1rem, 2.4vw, 2rem); margin-left: auto; }
+.juosta__meniu a { font-size: 0.9rem; text-decoration: none; opacity: 0.85; transition: opacity 0.2s; }
+.juosta__meniu a:hover { opacity: 1; text-decoration: underline; text-underline-offset: 5px; }
+section[id] { scroll-margin-top: calc(var(--juostos-aukstis) + 12px); }
 .juosta__vardas:hover { text-decoration: underline; text-underline-offset: 4px; }
 
 /* ---------- Pirmas ekranas ---------- */
@@ -296,61 +314,112 @@ a { color: inherit; }
   font: 400 clamp(2.4rem, 5vw, 4rem)/1 var(--antrastes);
   color: var(--zalia);
 }
-.darbas--svetaine > p { padding: 0; }
+.darbas--svetaine { justify-content: space-between; align-items: center; }
+.darbas--svetaine p { padding: 0; }
+
+/* ---------- Robotukai: šokinėja be perstojo, stovi eilutėje (ne absoliučiai, kad iPhone rodytų visus) ---------- */
+.robotukai { display: flex; align-items: flex-end; gap: clamp(8px, 1.4vw, 16px); padding-top: 28px; }
+.bot { position: relative; display: block; width: var(--w, 46px); aspect-ratio: 22 / 18; }
+.bot svg { display: block; width: 100%; height: 100%; overflow: visible; }
+.bot__kunas { transform-origin: 50% 100%; animation: suolis var(--trukme, 1s) var(--vel, 0s) infinite both; }
+.bot__seselis {
+  position: absolute; left: 50%; bottom: -8%; width: 100%; height: 14%;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(14, 13, 13, 0.35), transparent);
+  transform: translateX(-50%);
+  animation: seselis var(--trukme, 1s) var(--vel, 0s) infinite both;
+}
+.bot__akys { transform-box: fill-box; transform-origin: 50% 50%; animation: mirkt 6s var(--vel, 0s) steps(1, end) infinite; }
+.robotukai--mazi { padding-top: 0; margin-bottom: 1.4rem; }
+.robotukai--mazi .bot { --w: 34px; }
+.konsultacija .bot__seselis, .apacia .bot__seselis { background: radial-gradient(closest-side, rgba(0, 0, 0, 0.6), transparent); }
+@keyframes suolis {
+  0%   { transform: translateY(0) scale(1.14, 0.84); animation-timing-function: cubic-bezier(.1, .72, .3, 1); }
+  45%  { transform: translateY(-62%) scale(0.97, 1.04); animation-timing-function: cubic-bezier(.55, 0, .9, .45); }
+  92%  { transform: translateY(0) scale(1, 1); }
+  100% { transform: translateY(0) scale(1.14, 0.84); }
+}
+@keyframes seselis {
+  0%   { transform: translateX(-50%) scale(1.1); opacity: 0.9; }
+  45%  { transform: translateX(-50%) scale(0.5); opacity: 0.25; }
+  92%, 100% { transform: translateX(-50%) scale(1.1); opacity: 0.9; }
+}
+@keyframes mirkt { 0%, 94% { transform: scaleY(1); } 96% { transform: scaleY(0.15); } 98%, 100% { transform: scaleY(1); } }
 
 /* ---------- Atsiliepimai ---------- */
-.atsiliepimai {
+.atsiliepimai { background: var(--zalia); color: var(--kremine); }
+.atsiliepimai__vidus {
   max-width: var(--plotis);
   margin: 0 auto;
-  padding: clamp(3rem, 7vw, 6rem) var(--krastas) clamp(4rem, 8vw, 7rem);
+  padding: clamp(4rem, 9vw, 8rem) var(--krastas);
 }
-.atsiliepimai .antraste { max-width: 14ch; margin-bottom: clamp(2rem, 5vw, 3.5rem); }
-.atsiliepimai__stulpai {
-  columns: 3 300px;
-  column-gap: clamp(18px, 2.4vw, 32px);
-  margin-bottom: 2.4rem;
+.atsiliepimai .antraste { color: var(--kremine); max-width: 14ch; margin-bottom: clamp(2rem, 4vw, 3rem); }
+.citata { max-width: 52rem; margin-bottom: clamp(3rem, 6vw, 4.5rem); }
+.citata__tekstas {
+  font: italic 400 clamp(2.3rem, 5.4vw, 4.6rem)/1.08 var(--mintis);
+  padding-left: clamp(16px, 2vw, 24px);
+  border-left: 3px solid var(--oranzine);
+}
+.citata__po { margin: 1.4rem 0 1rem; padding-left: clamp(19px, calc(2vw + 3px), 27px); max-width: 30rem; font-size: 1.1rem; opacity: 0.9; }
+.citata .atsiliepimas__atidaryti { margin-left: clamp(19px, calc(2vw + 3px), 27px); }
+
+.atsiliepimai__tinklelis {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: clamp(14px, 1.6vw, 22px);
+  margin-bottom: 2.6rem;
 }
 .atsiliepimas {
-  break-inside: avoid;
-  margin-bottom: clamp(28px, 3.4vw, 44px);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 1.4rem;
+  padding: 24px 22px;
+  border-radius: var(--kampas);
+  background: var(--kremine);
+  color: var(--juoda);
 }
-.atsiliepimas .mintis { font-size: clamp(1.3rem, 1.9vw, 1.6rem); margin-bottom: 1rem; }
-.atsiliepimas img {
-  width: 100%;
-  height: auto;
+.atsiliepimas .mintis { font-size: clamp(1.2rem, 1.6vw, 1.4rem); color: var(--zalia); }
+.atsiliepimas__atidaryti {
+  align-self: flex-start;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: 600 0.88rem/1.4 var(--tekstas);
+  text-decoration: underline;
+  text-decoration-color: var(--oranzine);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 5px;
+  cursor: pointer;
+}
+.atsiliepimas__atidaryti:hover { color: var(--oranzine); }
+
+/* Visa žinutė atsidaro lange */
+.zinute {
+  width: min(460px, calc(100vw - 32px));
+  max-height: calc(100dvh - 48px);
+  padding: 0;
+  border: 0;
   border-radius: var(--kampas);
   background: var(--balta);
-  box-shadow: 0 0 0 1px var(--linija);
+  overflow: auto;
 }
-.atsiliepimai .mygtukas { margin-bottom: 2.4rem; }
-
-/* ---------- Žalia juosta su citata ---------- */
-.citata {
-  display: grid;
-  grid-template-columns: 1fr auto;
-  grid-template-areas: "tekstas foto" "po foto" "parasas foto";
-  align-items: start;
-  column-gap: clamp(2rem, 6vw, 6rem);
-  padding: clamp(4rem, 9vw, 8rem) max(var(--krastas), calc((100vw - var(--plotis)) / 2 + var(--krastas)));
-  background: var(--zalia);
-  color: var(--kremine);
-}
-.citata__tekstas {
-  grid-area: tekstas;
-  align-self: end;
-  font: italic 400 clamp(2.6rem, 6vw, 5.4rem)/1.08 var(--mintis);
-  padding-bottom: 0.1em;
-}
-.citata__po { grid-area: po; margin: 1.6rem 0 2rem; max-width: 30rem; font-size: 1.1rem; }
-.citata .parasas { grid-area: parasas; }
-.citata__foto {
-  grid-area: foto;
-  width: 100%;
-  height: auto;
-  max-width: 340px;
-  justify-self: end;
-  border-radius: var(--kampas);
-  transform: rotate(2deg);
+.zinute::backdrop { background: rgba(14, 13, 13, 0.78); }
+.zinute img { width: 100%; height: auto; }
+.zinute__uzdaryti {
+  position: sticky;
+  bottom: 12px;
+  display: block;
+  margin: -56px 12px 12px auto;
+  width: 44px;
+  height: 44px;
+  border: 0;
+  border-radius: 50%;
+  background: var(--juoda);
+  color: var(--balta);
+  font: 400 1.6rem/1 var(--tekstas);
+  cursor: pointer;
 }
 
 /* ---------- Mokymai ---------- */
@@ -396,9 +465,7 @@ a { color: inherit; }
 }
 
 .kaina {
-  align-self: start;
-  position: sticky;
-  top: calc(var(--juostos-aukstis) + 24px);
+  align-self: center;
   overflow: hidden;
   border-radius: var(--kampas);
   background: var(--zalia);
@@ -432,17 +499,48 @@ a { color: inherit; }
 }
 .gidas p { max-width: 34rem; }
 
-/* ---------- Apačia ---------- */
-.apacia {
-  padding: 1.4rem var(--krastas);
-  background: var(--zalia);
-  color: var(--balta);
-  text-align: center;
-  font-size: 0.85rem;
-  letter-spacing: 0.04em;
+/* ---------- Konsultacija ---------- */
+.konsultacija { background: var(--juoda); color: var(--kremine); }
+.konsultacija__vidus {
+  display: grid;
+  grid-template-columns: 7fr 5fr;
+  gap: clamp(2rem, 6vw, 6rem);
+  align-items: center;
+  max-width: var(--plotis);
+  margin: 0 auto;
+  padding: clamp(4rem, 9vw, 8rem) var(--krastas);
 }
-.apacia a { text-decoration: none; }
-.apacia a:hover { text-decoration: underline; text-underline-offset: 4px; }
+.konsultacija .antraste { color: var(--kremine); max-width: 13ch; }
+.konsultacija__ivadas { margin: 1.6rem 0 1.4rem; max-width: 34rem; font-size: 1.1rem; opacity: 0.92; }
+.konsultacija__sarasas { list-style: none; padding: 0; margin: 0; display: grid; gap: 0.8rem; }
+.konsultacija__sarasas li { position: relative; padding-left: 1.6rem; }
+.konsultacija__sarasas li::before {
+  content: "";
+  position: absolute; left: 0; top: 0.6em;
+  width: 10px; height: 10px;
+  background: var(--oranzine);
+}
+.konsultacija__kaina {
+  padding: clamp(24px, 3vw, 36px);
+  border-radius: var(--kampas);
+  background: var(--zalia);
+}
+.konsultacija__suma { font: 400 clamp(4.5rem, 8vw, 6.5rem)/0.9 var(--antrastes); color: var(--oranzine); }
+.konsultacija__laikas { margin-bottom: 1.6rem; font-weight: 600; font-size: 1.1rem; }
+.konsultacija__klausimai { margin-top: 1.4rem; font-size: 0.92rem; opacity: 0.92; }
+.konsultacija__klausimai a { font-weight: 600; text-underline-offset: 4px; overflow-wrap: anywhere; }
+
+/* ---------- Apačia ---------- */
+.apacia { background: var(--zalia); color: var(--kremine); }
+.apacia__vidus {
+  max-width: var(--plotis);
+  margin: 0 auto;
+  padding: clamp(3.5rem, 7vw, 5.5rem) var(--krastas) 2rem;
+  text-align: center;
+}
+.apacia__antraste { font: 400 clamp(2.4rem, 5vw, 4rem)/1 var(--antrastes); margin-bottom: 0.8rem; }
+.apacia__nuorodos { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; margin: 2rem 0 3rem; }
+.apacia__parasas { font-size: 0.8rem; letter-spacing: 0.08em; opacity: 0.7; }
 
 /* ---------- Planšetė ---------- */
 @media (max-width: 1000px) {
@@ -454,6 +552,10 @@ a { color: inherit; }
   .darbas--3d, .darbas--gidai { grid-column: 1 / -1; }
   .mokymai { grid-template-columns: 1fr; }
   .kaina { position: static; max-width: 34rem; }
+  .atsiliepimai__tinklelis { grid-template-columns: 1fr 1fr; }
+  .konsultacija__vidus { grid-template-columns: 1fr; }
+  .konsultacija__kaina { max-width: 34rem; }
+  .juosta__meniu { display: none; }
 }
 
 /* ---------- Telefonas ---------- */
@@ -469,10 +571,12 @@ a { color: inherit; }
   .darbas--reels .darbas__vaizdas, .darbas--karusele .darbas__vaizdas { aspect-ratio: 4 / 5; }
   .darbas--3d .darbas__vaizdas { aspect-ratio: 4 / 5; }
   .darbas--svetaine { flex-direction: column; }
-  .citata { grid-template-columns: 1fr; grid-template-areas: "tekstas" "po" "foto" "parasas"; }
-  .citata__foto { max-width: 22rem; transform: none; margin-bottom: 1.6rem; }
   .moduliai { grid-template-columns: 1fr; }
-  .gidas .mygtukas, .kaina .mygtukas, .herojus .mygtukas { width: 100%; }
+  .gidas .mygtukas, .kaina .mygtukas, .herojus .mygtukas, .konsultacija .mygtukas { width: 100%; }
+  .atsiliepimai__tinklelis { grid-template-columns: 1fr; }
+  .darbas--svetaine { align-items: flex-start; }
+  .robotukai .bot { --w: 40px; }
+  .apacia__nuorodos .mygtukas { width: 100%; white-space: normal; text-align: center; }
 }
 
 /* Jei žmogus išjungęs judesį sistemoje */
@@ -480,4 +584,5 @@ a { color: inherit; }
   html { scroll-behavior: auto; }
   .zymeklis { animation: none; }
   .mygtukas { transition: none; }
+  .bot__kunas, .bot__seselis, .bot__akys { animation: none; }
 }
