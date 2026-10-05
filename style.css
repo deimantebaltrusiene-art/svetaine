@@ -486,6 +486,41 @@ section[id] { scroll-margin-top: calc(var(--juostos-aukstis) + 12px); }
   .scena--produktas .scena__langas { height: min(118vw, 560px); margin-top: 1rem; }
 }
 
+/* „Mėta“ per Higgsfield: palyginimui su 3D scena */
+.palyginimas {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: minmax(0, 30rem) minmax(0, 320px);
+  justify-content: center;
+  align-items: center;
+  gap: clamp(1.5rem, 5vw, 4rem);
+  padding: clamp(2rem, 5vw, 4rem) var(--krastas) clamp(2.5rem, 5vw, 4rem);
+}
+.palyginimas__zyma {
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--oranzine);
+}
+.palyginimas__antraste {
+  font: 400 clamp(2rem, 4.5vw, 3.4rem)/1 var(--antrastes);
+  text-transform: uppercase;
+  color: var(--kremine);
+  margin: 0.4rem 0 1rem;
+}
+.palyginimas__tekstas > p:last-child { opacity: 0.85; }
+.palyginimas__video {
+  aspect-ratio: 9 / 16;
+  border-radius: var(--kampas);
+  overflow: hidden;
+  background: #000;
+}
+.palyginimas__video video { width: 100%; height: 100%; object-fit: cover; display: block; }
+@media (max-width: 760px) {
+  .palyginimas { grid-template-columns: minmax(0, 340px); }
+}
+
 /* ---------- Mokymai ---------- */
 .mokymai {
   display: grid;
@@ -626,7 +661,7 @@ section[id] { scroll-margin-top: calc(var(--juostos-aukstis) + 12px); }
   .mokymai { grid-template-columns: 1fr; }
   .kaina { position: static; max-width: 34rem; }
   .atsiliepimai__tinklelis { grid-template-columns: 1fr 1fr; }
-  .konsultacija__vidus { grid-template-columns: 1fr; }
+  .konsultacija__vidus { grid-template-columns: minmax(0, 1fr); }
   .konsultacija__kaina { max-width: 34rem; }
   .juosta__meniu { display: none; }
 }
@@ -659,3 +694,6 @@ section[id] { scroll-margin-top: calc(var(--juostos-aukstis) + 12px); }
   .mygtukas { transition: none; }
   .bot__kunas, .bot__seselis, .bot__akys { animation: none; }
 }
+
+/* Ilgas el. pašto adresas mygtuke neturi plėsti puslapio telefone */
+.konsultacija__kontaktai .mygtukas { max-width: 100%; overflow-wrap: anywhere; }
