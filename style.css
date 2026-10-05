@@ -464,6 +464,28 @@ section[id] { scroll-margin-top: calc(var(--juostos-aukstis) + 12px); }
   .scena__langas { height: min(118vw, 560px); margin-top: -2.5rem; }
 }
 
+/* Skardinė: tekstas kairėje, scena dešinėje */
+.scena--produktas {
+  display: grid;
+  grid-template-columns: 5fr 7fr;
+  align-items: center;
+  padding-inline: max(0px, (100% - var(--plotis)) / 2);
+  padding-bottom: clamp(2rem, 4vw, 3rem);
+}
+.scena--produktas .scena__tekstas { text-align: left; padding-right: 0; }
+.scena--produktas .antraste { margin: 0; max-width: 10ch; }
+.scena--produktas .scena__sakinys { margin: 1.2rem 0 1.8rem; }
+.scena--produktas .scena__langas { height: clamp(480px, 70vh, 720px); margin-top: 0; }
+.scena--produktas .scena__langas::after {
+  background: linear-gradient(90deg, var(--juoda), transparent 12%, transparent 88%, var(--juoda)),
+              linear-gradient(var(--juoda), transparent 12%, transparent 88%, var(--juoda));
+}
+.scena__uzuomina { margin-top: 1rem; font-size: 0.85rem; opacity: 0.6; }
+@media (max-width: 900px) {
+  .scena--produktas { grid-template-columns: 1fr; padding-inline: 0; }
+  .scena--produktas .scena__langas { height: min(118vw, 560px); margin-top: 1rem; }
+}
+
 /* ---------- Mokymai ---------- */
 .mokymai {
   display: grid;

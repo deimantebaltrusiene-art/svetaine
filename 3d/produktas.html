@@ -1,0 +1,427 @@
+<!doctype html>
+<html lang="lt">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Gėrimo reklama 3D</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Newsreader:ital,wght@1,400&family=Poppins:wght@600&display=swap" rel="stylesheet">
+<style>
+  html, body { margin: 0; height: 100%; overflow: hidden; background: #0e0d0d; }
+  canvas { display: block; touch-action: pan-y; cursor: grab; }
+  canvas:active { cursor: grabbing; }
+</style>
+</head>
+<body>
+
+<script type="importmap">
+{ "imports": {
+  "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js",
+  "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"
+} }
+</script>
+<script type="module">
+import * as THREE from 'three';
+import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
+import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
+import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
+import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
+import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
+
+// ====== Čia keisk produktą ======
+const PAVADINIMAS = 'MĖTA';
+const VIRSUJE = 'G A I V U S   G Ė R I M A S';
+const APACIOJE = 'mėtos ir apelsinas';
+const TURIS = '330 ml';
+const LAPU = 9, SKILTELIU = 6;
+const PURSLU_RITMAS = 4.5;   // s, kas kiek laiko pasipila purslai
+// ================================
+
+const ZALIA = '#5a6e5c', ORANZINE = '#e07b06', KREMINE = '#efe6dd';
+const capture = new URLSearchParams(location.search).has('capture');
+const vienas = window.parent === window;
+
+await Promise.race([
+  Promise.all([
+    document.fonts.load('400 300px "Bebas Neue"', PAVADINIMAS),
+    document.fonts.load('600 40px Poppins', VIRSUJE),
+    document.fonts.load('italic 400 60px Newsreader', APACIOJE),
+  ]),
+  new Promise(r => setTimeout(r, 3500)),
+]);
+
+// ---------- Pagalbinės ----------
+const ribos = (x, a = 0, b = 1) => Math.min(b, Math.max(a, x));
+const lygiai = (a, b, x) => { const t = ribos((x - a) / (b - a)); return t * t * (3 - 2 * t); };
+const isLeto = t => 1 - Math.pow(1 - t, 3);
+let seklas = 11;
+const atsitiktinis = () => (seklas = (seklas * 16807) % 2147483647) / 2147483647;
+
+function drobe(w, h) {
+  const c = document.createElement('canvas');
+  c.width = w; c.height = h;
+  return [c, c.getContext('2d')];
+}
+function tekstura(c) {
+  const t = new THREE.CanvasTexture(c);
+  t.colorSpace = THREE.SRGBColorSpace;
+  t.anisotropy = 8;
+  return t;
+}
+function apvaliTekstura(spalvos) {
+  const [c, x] = drobe(256, 256);
+  const g = x.createRadialGradient(128, 128, 0, 128, 128, 128);
+  spalvos.forEach(([s, sp]) => g.addColorStop(s, sp));
+  x.fillStyle = g; x.fillRect(0, 0, 256, 256);
+  return tekstura(c);
+}
+
+// ---------- Scena ----------
+const renderer = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: capture });
+renderer.setPixelRatio(Math.min(devicePixelRatio, capture ? 1 : 1.75));
+document.body.prepend(renderer.domElement);
+
+const scene = new THREE.Scene();
+{
+  const [c, x] = drobe(1024, 1024);
+  x.fillStyle = '#0e0d0d'; x.fillRect(0, 0, 1024, 1024);
+  const g = x.createRadialGradient(512, 470, 0, 512, 470, 540);
+  g.addColorStop(0, '#41503f'); g.addColorStop(0.35, '#283126');
+  g.addColorStop(0.7, '#141713'); g.addColorStop(1, '#0e0d0d');
+  x.fillStyle = g; x.fillRect(0, 0, 1024, 1024);
+  scene.background = tekstura(c);
+}
+const pmrem = new THREE.PMREMGenerator(renderer);
+scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
+scene.environmentIntensity = 0.7;
+
+const camera = new THREE.PerspectiveCamera(30, 1, 0.1, 100);
+
+const rakto = new THREE.DirectionalLight(0xfff0e0, 2.2);
+rakto.position.set(-4, 5, 6);
+scene.add(rakto);
+const kontras = new THREE.PointLight(0xe07b06, 40, 10);
+kontras.position.set(2.6, 1.5, -2);
+scene.add(kontras);
+const zalias = new THREE.PointLight(0x8fb59a, 30, 10);
+zalias.position.set(-2.8, -0.5, -1.5);
+scene.add(zalias);
+
+// Didžiulis žodis fone ir oranžinė „saulė“ už skardinės
+{
+  const [c, x] = drobe(2048, 700);
+  x.font = '400 680px "Bebas Neue", Impact, sans-serif';
+  x.textAlign = 'center'; x.textBaseline = 'middle';
+  x.lineWidth = 5; x.strokeStyle = 'rgba(239,230,221,0.22)';
+  x.strokeText(PAVADINIMAS, 1024, 420);
+  const fonas = new THREE.Mesh(new THREE.PlaneGeometry(11, 11 * 700 / 2048),
+    new THREE.MeshBasicMaterial({ map: tekstura(c), transparent: true, depthWrite: false }));
+  fonas.position.set(0, 0.2, -4);
+  scene.add(fonas);
+}
+const saule = new THREE.Mesh(new THREE.PlaneGeometry(5.2, 5.2), new THREE.MeshBasicMaterial({
+  map: apvaliTekstura([[0, 'rgba(224,123,6,0.75)'], [0.38, 'rgba(224,123,6,0.3)'], [1, 'rgba(224,123,6,0)']]),
+  transparent: true, depthWrite: false, blending: THREE.AdditiveBlending,
+}));
+saule.position.set(0, 0.25, -2.5);
+scene.add(saule);
+
+// ---------- Pakyla ----------
+const PAKYLA = -1.45;
+const pakyla = new THREE.Mesh(new THREE.CylinderGeometry(1.25, 1.32, 0.34, 96),
+  new THREE.MeshStandardMaterial({ color: 0x161816, roughness: 0.35, metalness: 0.4 }));
+pakyla.position.y = PAKYLA - 0.17;
+scene.add(pakyla);
+const ziedas = new THREE.Mesh(new THREE.TorusGeometry(1.255, 0.012, 8, 128),
+  new THREE.MeshBasicMaterial({ color: ORANZINE, toneMapped: false }));
+ziedas.rotation.x = Math.PI / 2;
+ziedas.position.y = PAKYLA;
+scene.add(ziedas);
+const seselis = new THREE.Mesh(new THREE.PlaneGeometry(1.9, 1.9), new THREE.MeshBasicMaterial({
+  map: apvaliTekstura([[0, 'rgba(0,0,0,0.85)'], [0.55, 'rgba(0,0,0,0.3)'], [1, 'rgba(0,0,0,0)']]),
+  transparent: true, depthWrite: false,
+}));
+seselis.rotation.x = -Math.PI / 2;
+seselis.position.y = PAKYLA + 0.003;
+scene.add(seselis);
+
+// ---------- Skardinė ----------
+const R = 0.66, AUKSTIS = 2.0;
+const skardine = new THREE.Group();
+const pasvirimas = new THREE.Group();
+pasvirimas.add(skardine);
+scene.add(pasvirimas);
+
+function etikete() {
+  const W = 2048, H = 1024;
+  const [c, x] = drobe(W, H);
+  const g = x.createLinearGradient(0, 0, 0, H);
+  g.addColorStop(0, '#6b806c'); g.addColorStop(0.55, ZALIA); g.addColorStop(1, '#3d4c3f');
+  x.fillStyle = g; x.fillRect(0, 0, W, H);
+  // plonos vertikalios juostelės, kad metalas „žaistų“
+  for (let i = 0; i < W; i += 64) { x.fillStyle = 'rgba(255,255,255,0.025)'; x.fillRect(i, 0, 22, H); }
+  x.fillStyle = ORANZINE; x.fillRect(0, H * 0.74, W, 26);
+  x.fillStyle = 'rgba(14,13,13,0.55)'; x.fillRect(0, H * 0.74 + 26, W, 6);
+  [W * 0.25, W * 0.75].forEach(cx => {
+    x.textAlign = 'center';
+    x.fillStyle = 'rgba(239,230,221,0.85)';
+    x.font = '600 38px Poppins, sans-serif';
+    x.textBaseline = 'alphabetic';
+    x.fillText(VIRSUJE, cx, H * 0.17);
+    x.fillStyle = KREMINE;
+    x.font = '400 430px "Bebas Neue", Impact, sans-serif';
+    x.shadowColor = 'rgba(0,0,0,0.35)'; x.shadowBlur = 24; x.shadowOffsetY = 10;
+    x.fillText(PAVADINIMAS, cx, H * 0.62);
+    x.shadowColor = 'transparent';
+    x.fillStyle = KREMINE;
+    x.font = 'italic 400 64px Newsreader, Georgia, serif';
+    x.fillText(APACIOJE, cx, H * 0.88);
+    x.font = '600 30px Poppins, sans-serif';
+    x.fillStyle = 'rgba(239,230,221,0.7)';
+    x.fillText(TURIS, cx, H * 0.96);
+  });
+  const t = tekstura(c);
+  return t;
+}
+const kunas = new THREE.Mesh(new THREE.CylinderGeometry(R, R, AUKSTIS, 128, 1, true),
+  new THREE.MeshStandardMaterial({ map: etikete(), metalness: 0.55, roughness: 0.32 }));
+skardine.add(kunas);
+
+const metalas = new THREE.MeshStandardMaterial({ color: 0xd4d8d6, metalness: 1, roughness: 0.34, side: THREE.DoubleSide });
+const h = AUKSTIS / 2;
+const virsus = new THREE.LatheGeometry([
+  [R, h], [R - 0.02, h + 0.06], [R - 0.08, h + 0.14], [R - 0.1, h + 0.19],
+  [R - 0.085, h + 0.215], [R - 0.11, h + 0.2], [R - 0.13, h + 0.17], [0, h + 0.16],
+].map(([a, b]) => new THREE.Vector2(a, b)), 128);
+skardine.add(new THREE.Mesh(virsus, metalas));
+const apacia = new THREE.LatheGeometry([
+  [0, -h - 0.06], [R - 0.22, -h - 0.12], [R - 0.12, -h - 0.13], [R - 0.04, -h - 0.08], [R, -h],
+].map(([a, b]) => new THREE.Vector2(a, b)), 128);
+skardine.add(new THREE.Mesh(apacia, metalas));
+// atidarymo liežuvėlis
+const liezuvelis = new THREE.Mesh(new THREE.TorusGeometry(0.11, 0.022, 8, 32), metalas);
+liezuvelis.rotation.x = Math.PI / 2;
+liezuvelis.scale.set(1, 1.5, 1);
+liezuvelis.position.set(0, h + 0.18, 0.13);
+skardine.add(liezuvelis);
+
+// Rasos lašeliai ant skardinės
+{
+  const N = 420, v = new Float32Array(N * 3), d = new Float32Array(N);
+  for (let i = 0; i < N; i++) {
+    const a = atsitiktinis() * Math.PI * 2;
+    v.set([Math.cos(a) * (R + 0.006), (atsitiktinis() - 0.5) * AUKSTIS * 0.92, Math.sin(a) * (R + 0.006)], i * 3);
+  }
+  const geo = new THREE.BufferGeometry();
+  geo.setAttribute('position', new THREE.BufferAttribute(v, 3));
+  skardine.add(new THREE.Points(geo, new THREE.PointsMaterial({
+    size: 0.03, map: apvaliTekstura([[0, 'rgba(255,255,255,1)'], [0.4, 'rgba(255,255,255,0.4)'], [1, 'rgba(255,255,255,0)']]),
+    transparent: true, opacity: 0.8, depthWrite: false, blending: THREE.AdditiveBlending,
+  })));
+}
+
+// ---------- Mėtų lapeliai ----------
+function lapoTekstura() {
+  const [c, x] = drobe(256, 512);
+  const g = x.createLinearGradient(0, 0, 256, 0);
+  g.addColorStop(0, '#3f6b47'); g.addColorStop(0.5, '#6d9a68'); g.addColorStop(1, '#3f6b47');
+  x.fillStyle = g; x.fillRect(0, 0, 256, 512);
+  x.strokeStyle = 'rgba(220,240,200,0.55)'; x.lineWidth = 6;
+  x.beginPath(); x.moveTo(128, 512); x.lineTo(128, 20); x.stroke();
+  x.lineWidth = 3; x.strokeStyle = 'rgba(220,240,200,0.3)';
+  for (let y = 460; y > 60; y -= 58) {
+    x.beginPath(); x.moveTo(128, y); x.quadraticCurveTo(170, y - 30, 240, y - 70); x.stroke();
+    x.beginPath(); x.moveTo(128, y); x.quadraticCurveTo(86, y - 30, 16, y - 70); x.stroke();
+  }
+  return tekstura(c);
+}
+const lapoForma = new THREE.Shape();
+lapoForma.moveTo(0, 0);
+lapoForma.bezierCurveTo(0.34, 0.12, 0.32, 0.6, 0, 0.9);
+lapoForma.bezierCurveTo(-0.32, 0.6, -0.34, 0.12, 0, 0);
+const lapoGeo = new THREE.ShapeGeometry(lapoForma, 16);
+{
+  const p = lapoGeo.attributes.position, uv = lapoGeo.attributes.uv;
+  for (let i = 0; i < p.count; i++) {
+    const X = p.getX(i), Y = p.getY(i);
+    uv.setXY(i, (X + 0.34) / 0.68, Y / 0.9);
+    p.setZ(i, X * X * 1.4 - Math.sin(Y * 3) * 0.04);   // lapas šiek tiek išlenktas
+    p.setY(i, Y - 0.45);
+  }
+  lapoGeo.computeVertexNormals();
+}
+const lapoMat = new THREE.MeshStandardMaterial({ map: lapoTekstura(), roughness: 0.55, side: THREE.DoubleSide });
+
+// ---------- Apelsinų skiltelės ----------
+function skiltelesTekstura() {
+  const [c, x] = drobe(512, 512);
+  const C = 256;
+  x.fillStyle = '#c75f05'; x.beginPath(); x.arc(C, C, 256, 0, Math.PI * 2); x.fill();
+  x.fillStyle = '#f6e7cf'; x.beginPath(); x.arc(C, C, 226, 0, Math.PI * 2); x.fill();
+  const S = 10;
+  for (let i = 0; i < S; i++) {
+    const a0 = (i / S) * Math.PI * 2 + 0.05, a1 = ((i + 1) / S) * Math.PI * 2 - 0.05;
+    const g = x.createRadialGradient(C, C, 20, C, C, 210);
+    g.addColorStop(0, '#f5a03a'); g.addColorStop(1, '#d9740c');
+    x.fillStyle = g;
+    x.beginPath(); x.moveTo(C + Math.cos((a0 + a1) / 2) * 16, C + Math.sin((a0 + a1) / 2) * 16);
+    x.arc(C, C, 208, a0, a1); x.closePath(); x.fill();
+  }
+  // sultingi taškeliai
+  for (let i = 0; i < 260; i++) {
+    const a = atsitiktinis() * Math.PI * 2, r = 40 + atsitiktinis() * 160;
+    x.fillStyle = 'rgba(255,230,170,0.35)';
+    x.beginPath(); x.ellipse(C + Math.cos(a) * r, C + Math.sin(a) * r, 3, 9, a, 0, Math.PI * 2); x.fill();
+  }
+  x.fillStyle = '#f6e7cf'; x.beginPath(); x.arc(C, C, 14, 0, Math.PI * 2); x.fill();
+  return tekstura(c);
+}
+const skiltelesGeo = new THREE.CylinderGeometry(0.4, 0.4, 0.07, 64);
+const skiltelesVeidas = new THREE.MeshStandardMaterial({ map: skiltelesTekstura(), roughness: 0.55 });
+const skiltelesMat = [new THREE.MeshStandardMaterial({ color: 0xd2650a, roughness: 0.6 }), skiltelesVeidas, skiltelesVeidas];
+
+// ---------- Skraidantys daiktai ----------
+const daiktai = [];
+function pridek(mesh, i, kiek, spindulys, mastas) {
+  scene.add(mesh);
+  daiktai.push({
+    mesh, mastas,
+    kampas: (i / kiek) * Math.PI * 2 + atsitiktinis() * 0.5,
+    spindulys: spindulys + atsitiktinis() * 0.7,
+    aukstis: (atsitiktinis() - 0.5) * 2.6,
+    greitis: 0.25 + atsitiktinis() * 0.2,
+    sukimas: new THREE.Vector3(atsitiktinis() - 0.5, atsitiktinis() - 0.5, atsitiktinis() - 0.5).multiplyScalar(2.2),
+    vel: 0.5 + atsitiktinis() * 1.2,
+  });
+}
+for (let i = 0; i < LAPU; i++) pridek(new THREE.Mesh(lapoGeo, lapoMat), i, LAPU, 1.5, 0.75 + atsitiktinis() * 0.4);
+for (let i = 0; i < SKILTELIU; i++) pridek(new THREE.Mesh(skiltelesGeo, skiltelesMat), i + 0.5, SKILTELIU, 1.7, 0.8 + atsitiktinis() * 0.35);
+
+// ---------- Purslai ----------
+const PURSLU = 380;
+const purslaiGeo = new THREE.BufferGeometry();
+const purslaiVietos = new Float32Array(PURSLU * 3);
+const purslaiGreitis = new Float32Array(PURSLU * 3);
+for (let i = 0; i < PURSLU; i++) {
+  const a = atsitiktinis() * Math.PI * 2, s = 1.2 + atsitiktinis() * 2.2;
+  purslaiGreitis.set([Math.cos(a) * s, 2.2 + atsitiktinis() * 3.2, Math.sin(a) * s * 0.8], i * 3);
+}
+purslaiGeo.setAttribute('position', new THREE.BufferAttribute(purslaiVietos, 3));
+const purslaiMat = new THREE.PointsMaterial({
+  size: 0.06, color: 0xdff3e6,
+  map: apvaliTekstura([[0, 'rgba(255,255,255,1)'], [0.45, 'rgba(255,255,255,0.45)'], [1, 'rgba(255,255,255,0)']]),
+  transparent: true, opacity: 0, depthWrite: false, blending: THREE.AdditiveBlending,
+});
+scene.add(new THREE.Points(purslaiGeo, purslaiMat));
+
+// ---------- Efektai ----------
+const composer = new EffectComposer(renderer);
+composer.addPass(new RenderPass(scene, camera));
+composer.addPass(new UnrealBloomPass(new THREE.Vector2(256, 256), 0.3, 0.5, 0.92));
+composer.addPass(new OutputPass());
+
+// ---------- Dydis ----------
+let statmenas = false;
+const kameraI = new THREE.Vector3();
+function dydis() {
+  const w = innerWidth, hh = innerHeight;
+  renderer.setSize(w, hh);
+  composer.setSize(w, hh);
+  camera.aspect = w / hh;
+  statmenas = camera.aspect < 0.95;
+  camera.fov = statmenas ? 40 : 30;
+  kameraI.set(0, 0.5, statmenas ? 8.6 : 8.0);
+  camera.updateProjectionMatrix();
+}
+addEventListener('resize', dydis);
+dydis();
+
+// ---------- Pelė ir pirštas ----------
+const pele = { x: 0, y: 0, tx: 0, ty: 0 };
+let pasukimas = 0, greitis = 0, tempia = false, buvesX = 0;
+const el = renderer.domElement;
+el.addEventListener('pointermove', e => {
+  pele.tx = (e.clientX / innerWidth) * 2 - 1;
+  pele.ty = (e.clientY / innerHeight) * 2 - 1;
+  if (tempia) { greitis = (e.clientX - buvesX) * 0.008; buvesX = e.clientX; pasukimas += greitis; }
+});
+el.addEventListener('pointerdown', e => { tempia = true; buvesX = e.clientX; el.setPointerCapture(e.pointerId); });
+el.addEventListener('pointerup', () => { tempia = false; });
+el.addEventListener('pointercancel', () => { tempia = false; });
+el.addEventListener('pointerleave', () => { pele.tx = 0; pele.ty = 0; });
+
+// ---------- Vienas kadras ----------
+function kadras(t) {
+  // kamera atplaukia iš šono, paskui lengvai sūpuojasi
+  const atejo = isLeto(ribos(t / 2.8));
+  const kampas = (1 - atejo) * 0.9 + Math.sin(t * 0.3) * 0.08;
+  pele.x += (pele.tx - pele.x) * 0.06;
+  pele.y += (pele.ty - pele.y) * 0.06;
+  const atstumas = kameraI.z + (1 - atejo) * 2.5;
+  camera.position.set(Math.sin(kampas) * atstumas + pele.x * 0.5, kameraI.y - pele.y * 0.4 + (1 - atejo) * 1.2, Math.cos(kampas) * atstumas);
+  camera.lookAt(0, statmenas ? 0.05 : -0.05, 0);
+
+  // skardinė iškyla iš pakylos ir sukasi
+  if (!tempia) { greitis *= 0.95; pasukimas += greitis; }
+  const iskilo = isLeto(lygiai(0.2, 1.8, t));
+  skardine.rotation.y = t * 0.55 + pasukimas - 1.2 * (1 - iskilo);
+  pasvirimas.position.y = -0.55 * (1 - iskilo) + 0.06 + Math.sin(t * 1.1) * 0.07;
+  pasvirimas.rotation.z = -0.14 + Math.sin(t * 0.7) * 0.04;
+  pasvirimas.rotation.x = 0.08;
+  pasvirimas.scale.setScalar(0.6 + 0.4 * iskilo);
+  seselis.material.opacity = 0.6 + 0.4 * iskilo - Math.sin(t * 1.1) * 0.1;
+  saule.material.opacity = lygiai(0.5, 2.2, t) * (0.9 + Math.sin(t * 1.7) * 0.1);
+
+  // lapeliai ir skiltelės skrieja aplink
+  daiktai.forEach((d, i) => {
+    const atskrido = isLeto(lygiai(0.8 + i * 0.07, 2.2 + i * 0.07, t));
+    const a = d.kampas + t * d.greitis;
+    const r = d.spindulys + (1 - atskrido) * 4;
+    d.mesh.position.set(Math.cos(a) * r, d.aukstis + Math.sin(t * d.vel + i) * 0.18, Math.sin(a) * r * 0.9);
+    d.mesh.rotation.set(t * d.sukimas.x + i, t * d.sukimas.y + i * 2, t * d.sukimas.z);
+    d.mesh.scale.setScalar(d.mastas * atskrido);
+  });
+
+  // purslai iš apačios, kas PURSLU_RITMAS sekundžių
+  const f = t < 1.6 ? -1 : (t - 1.6) % PURSLU_RITMAS;
+  if (f >= 0 && f < 1.8) {
+    for (let i = 0; i < PURSLU; i++) {
+      const vx = purslaiGreitis[i * 3], vy = purslaiGreitis[i * 3 + 1], vz = purslaiGreitis[i * 3 + 2];
+      purslaiVietos[i * 3] = vx * f * 0.6;
+      purslaiVietos[i * 3 + 1] = PAKYLA + 0.1 + vy * f - 4.4 * f * f;
+      purslaiVietos[i * 3 + 2] = vz * f * 0.6;
+    }
+    purslaiGeo.attributes.position.needsUpdate = true;
+    purslaiMat.opacity = lygiai(0, 0.08, f) * (1 - lygiai(0.9, 1.8, f));
+  } else purslaiMat.opacity = 0;
+
+  composer.render();
+}
+
+// ---------- Laikas ----------
+let veikia = vienas && !capture;
+addEventListener('message', e => {
+  if (e.data === 'rodomas') veikia = true;
+  if (e.data === 'pasleptas') veikia = false;
+});
+let laikas = 0, buvo = null;
+function ciklas(dabar) {
+  requestAnimationFrame(ciklas);
+  if (!veikia || document.hidden) { buvo = null; return; }
+  const dt = buvo === null ? 0 : Math.min(0.05, (dabar - buvo) / 1000);
+  buvo = dabar;
+  laikas += dt;
+  kadras(laikas);
+}
+
+if (capture) {
+  window.seek = t => { kadras(t); kadras(t); };
+  window.paruosta = true;
+} else {
+  kadras(0);
+  requestAnimationFrame(ciklas);
+}
+</script>
+</body>
+</html>

@@ -69,9 +69,9 @@ if (orbita && !ramiai && 'IntersectionObserver' in window) {
   stebetojas.observe(orbita);
 }
 
-// ---- Kompiuterio scena: įkeliama priartėjus, o sukasi tik tada, kai matosi ----
-const scena = document.querySelector('[data-scena]');
-if (scena && !ramiai && 'IntersectionObserver' in window) {
+// ---- 3D scenos (kompiuteris, skardinė): įkeliamos priartėjus, o sukasi tik tada, kai matosi ----
+document.querySelectorAll('[data-scena]').forEach(scena => {
+  if (ramiai || !('IntersectionObserver' in window)) return;
   let remas = null, matosi = false;
   const pranesk = () => remas?.contentWindow?.postMessage(matosi ? 'rodomas' : 'pasleptas', '*');
 
@@ -79,8 +79,8 @@ if (scena && !ramiai && 'IntersectionObserver' in window) {
     if (!irasai[0].isIntersecting) return;
     krovejas.disconnect();
     remas = document.createElement('iframe');
-    remas.src = '3d/kompiuteris.html';
-    remas.title = 'Kompiuteris, iš kurio išskrenda trylika mokymų modulių';
+    remas.src = scena.dataset.scena;
+    remas.title = scena.dataset.pavadinimas;
     remas.setAttribute('tabindex', '-1');
     remas.style.cssText += 'position:absolute;inset:0;opacity:0;transition:opacity .6s';
     remas.addEventListener('load', () => {
@@ -90,12 +90,12 @@ if (scena && !ramiai && 'IntersectionObserver' in window) {
   }, { rootMargin: '300px' });
   krovejas.observe(scena);
 
-  // Kompiuteris atsidaro tik tada, kai žmogus jau žiūri, ne anksčiau
+  // Scena prasideda tik tada, kai žmogus jau žiūri, ne anksčiau
   new IntersectionObserver(irasai => {
     matosi = irasai[0].isIntersecting;
     pranesk();
   }, { threshold: 0.35 }).observe(scena);
-}
+});
 
 // ---- Robotukai: vienas šablonas, kiekvienas gauna savo dydį ir šuolio ritmą ----
 const sablonas = document.getElementById('robotukas');
