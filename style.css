@@ -288,9 +288,7 @@ section[id] { scroll-margin-top: calc(var(--juostos-aukstis) + 12px); }
 .darbas--zinutes h3, .darbas--saskaitos h3,
 .darbas--zinutes > p, .darbas--saskaitos > p { padding: 0; }
 
-.darbas--3d { grid-column: 1 / span 7; }
-.darbas--3d .darbas__vaizdas { aspect-ratio: 4 / 3; }
-.darbas--gidai { grid-column: 8 / span 5; }
+.darbas--gidai { grid-column: 1 / span 7; }
 .darbas__vaizdas--pora {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -302,8 +300,8 @@ section[id] { scroll-margin-top: calc(var(--juostos-aukstis) + 12px); }
 .darbas__vaizdas--pora img { aspect-ratio: 3 / 4.2; border-radius: 6px; object-position: top; }
 
 .darbas--svetaine {
-  grid-column: 1 / -1;
-  flex-direction: row;
+  grid-column: 8 / span 5;
+  flex-direction: column;
   align-items: baseline;
   flex-wrap: wrap;
   gap: 0.4rem 2rem;
@@ -657,7 +655,7 @@ section[id] { scroll-margin-top: calc(var(--juostos-aukstis) + 12px); }
   .darbas--zinutes { grid-column: 1 / span 6; }
   .darbas--saskaitos { grid-column: 7 / span 6; }
   .darbas--reels, .darbas--karusele { grid-row: auto; }
-  .darbas--3d, .darbas--gidai { grid-column: 1 / -1; }
+  .darbas--gidai, .darbas--svetaine { grid-column: 1 / -1; }
   .mokymai { grid-template-columns: 1fr; }
   .kaina { position: static; max-width: 34rem; }
   .atsiliepimai__tinklelis { grid-template-columns: 1fr 1fr; }
@@ -677,7 +675,6 @@ section[id] { scroll-margin-top: calc(var(--juostos-aukstis) + 12px); }
   .bento { grid-template-columns: 1fr; }
   .bento > .darbas { grid-column: 1 / -1; }
   .darbas--reels .darbas__vaizdas, .darbas--karusele .darbas__vaizdas { aspect-ratio: 4 / 5; }
-  .darbas--3d .darbas__vaizdas { aspect-ratio: 4 / 5; }
   .darbas--svetaine { flex-direction: column; }
   .moduliai { grid-template-columns: 1fr; }
   .gidas .mygtukas, .kaina .mygtukas, .herojus .mygtukas, .konsultacija .mygtukas { width: 100%; }
