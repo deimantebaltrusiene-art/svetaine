@@ -402,11 +402,11 @@ section[id] { scroll-margin-top: calc(var(--juostos-aukstis) + 12px); }
   padding: 0;
   border: 0;
   border-radius: var(--kampas);
-  background: var(--balta);
+  background: var(--kremine);
   overflow: auto;
 }
 .zinute::backdrop { background: rgba(14, 13, 13, 0.78); }
-.zinute img { width: 100%; height: auto; }
+.zinute img { width: 100%; height: auto; padding: 20px 20px 64px; }
 .zinute__uzdaryti {
   position: sticky;
   bottom: 12px;
@@ -535,7 +535,8 @@ section[id] { scroll-margin-top: calc(var(--juostos-aukstis) + 12px); }
 }
 .konsultacija__suma { font: 400 clamp(4.5rem, 8vw, 6.5rem)/0.9 var(--antrastes); color: var(--oranzine); }
 .konsultacija__laikas { margin-bottom: 1.6rem; font-weight: 600; font-size: 1.1rem; }
-.konsultacija__klausimai { margin-top: 1.4rem; font-size: 0.92rem; opacity: 0.92; }
+.konsultacija__klausimai { margin-bottom: 1.2rem; font-size: 0.98rem; opacity: 0.92; }
+.konsultacija__kontaktai { display: flex; flex-wrap: wrap; gap: 12px; }
 .konsultacija__klausimai a { font-weight: 600; text-underline-offset: 4px; overflow-wrap: anywhere; }
 
 /* ---------- Apačia ---------- */
