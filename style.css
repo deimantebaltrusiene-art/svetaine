@@ -362,6 +362,7 @@ section[id] { scroll-margin-top: calc(var(--juostos-aukstis) + 12px); }
 .citata__po { margin: 1.4rem 0 1rem; padding-left: clamp(19px, calc(2vw + 3px), 27px); max-width: 30rem; font-size: 1.1rem; opacity: 0.9; }
 .citata .atsiliepimas__atidaryti { margin-left: clamp(19px, calc(2vw + 3px), 27px); }
 
+.atsiliepimai__vidus > .mygtukas { margin-top: 0.4rem; }
 .atsiliepimai__tinklelis {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -604,6 +605,38 @@ section[id] { scroll-margin-top: calc(var(--juostos-aukstis) + 12px); }
 }
 .gidas p { max-width: 34rem; }
 
+/* ---------- Dažniausi klausimai ---------- */
+.duk { background: var(--kremine); }
+.duk__vidus {
+  max-width: 52rem;
+  margin: 0 auto;
+  padding: clamp(3.5rem, 8vw, 6rem) var(--krastas);
+}
+.duk .antraste { margin-bottom: clamp(1.6rem, 3vw, 2.4rem); }
+.duk__klausimas { border-top: 2px solid var(--linija); }
+.duk__klausimas:last-of-type { border-bottom: 2px solid var(--linija); margin-bottom: 2.2rem; }
+.duk__klausimas summary {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.15rem 0;
+  font-weight: 600;
+  font-size: 1.08rem;
+  cursor: pointer;
+  list-style: none;
+}
+.duk__klausimas summary::-webkit-details-marker { display: none; }
+.duk__klausimas summary::after {
+  content: "+";
+  flex: none;
+  font: 400 2rem/1 var(--antrastes);
+  color: var(--oranzine);
+  transition: transform 0.2s;
+}
+.duk__klausimas[open] summary::after { transform: rotate(45deg); }
+.duk__klausimas p { padding: 0 0 1.3rem; max-width: 40rem; opacity: 0.85; }
+
 /* ---------- Konsultacija ---------- */
 .konsultacija { background: var(--juoda); color: var(--kremine); }
 .konsultacija__vidus {
@@ -677,7 +710,7 @@ section[id] { scroll-margin-top: calc(var(--juostos-aukstis) + 12px); }
   .darbas--reels .darbas__vaizdas, .darbas--karusele .darbas__vaizdas { aspect-ratio: 4 / 5; }
   .darbas--svetaine { flex-direction: column; }
   .moduliai { grid-template-columns: 1fr; }
-  .gidas .mygtukas, .kaina .mygtukas, .herojus .mygtukas, .konsultacija .mygtukas { width: 100%; }
+  .gidas .mygtukas, .kaina .mygtukas, .duk .mygtukas, .atsiliepimai .mygtukas, .herojus .mygtukas, .konsultacija .mygtukas { width: 100%; }
   .atsiliepimai__tinklelis { grid-template-columns: 1fr; }
   .darbas--svetaine { align-items: flex-start; }
   .robotukai .bot { --w: 40px; }
