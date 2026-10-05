@@ -694,3 +694,26 @@ section[id] { scroll-margin-top: calc(var(--juostos-aukstis) + 12px); }
 
 /* Ilgas el. pašto adresas mygtuke neturi plėsti puslapio telefone */
 .konsultacija__kontaktai .mygtukas { max-width: 100%; overflow-wrap: anywhere; }
+
+/* „Ir ši svetainė“ šalia gidų: pilna žalia kortelė, robotukai dideli, viskas per vidurį */
+.darbas--svetaine {
+  justify-content: center;
+  align-items: flex-start;
+  gap: 1rem;
+  padding: clamp(28px, 3vw, 44px);
+  background: var(--zalia);
+  color: var(--kremine);
+  box-shadow: none;
+}
+.darbas--svetaine .darbas__didelis { color: var(--kremine); font-size: clamp(3rem, 5.5vw, 5rem); }
+.darbas--svetaine p { font-size: 1.05rem; max-width: 22rem; }
+.darbas--svetaine .robotukai { order: -1; padding-top: 0; margin-bottom: 1.2rem; }
+.darbas--svetaine .bot { width: calc(var(--w, 46px) * 1.35); }
+.darbas--svetaine .robotukai { max-width: 100%; flex-wrap: wrap; }
+@media (max-width: 1000px) {
+  .darbas--svetaine { padding-block: 40px; }
+  .darbas--svetaine .bot { width: calc(var(--w, 46px) * 1.3); }
+}
+@media (max-width: 500px) {
+  .darbas--svetaine .bot { width: var(--w, 46px); }
+}
