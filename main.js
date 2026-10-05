@@ -69,6 +69,34 @@ if (orbita && !ramiai && 'IntersectionObserver' in window) {
   stebetojas.observe(orbita);
 }
 
+// ---- Kompiuterio scena: įkeliama priartėjus, o sukasi tik tada, kai matosi ----
+const scena = document.querySelector('[data-scena]');
+if (scena && !ramiai && 'IntersectionObserver' in window) {
+  let remas = null, matosi = false;
+  const pranesk = () => remas?.contentWindow?.postMessage(matosi ? 'rodomas' : 'pasleptas', '*');
+
+  const krovejas = new IntersectionObserver(irasai => {
+    if (!irasai[0].isIntersecting) return;
+    krovejas.disconnect();
+    remas = document.createElement('iframe');
+    remas.src = '3d/kompiuteris.html';
+    remas.title = 'Kompiuteris, iš kurio išskrenda trylika mokymų modulių';
+    remas.setAttribute('tabindex', '-1');
+    remas.style.cssText += 'position:absolute;inset:0;opacity:0;transition:opacity .6s';
+    remas.addEventListener('load', () => {
+      setTimeout(() => { remas.style.opacity = '1'; pranesk(); }, 400);
+    });
+    scena.appendChild(remas);
+  }, { rootMargin: '300px' });
+  krovejas.observe(scena);
+
+  // Kompiuteris atsidaro tik tada, kai žmogus jau žiūri, ne anksčiau
+  new IntersectionObserver(irasai => {
+    matosi = irasai[0].isIntersecting;
+    pranesk();
+  }, { threshold: 0.35 }).observe(scena);
+}
+
 // ---- Robotukai: vienas šablonas, kiekvienas gauna savo dydį ir šuolio ritmą ----
 const sablonas = document.getElementById('robotukas');
 document.querySelectorAll('[data-robotukai]').forEach(vieta => {

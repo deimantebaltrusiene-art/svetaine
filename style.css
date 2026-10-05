@@ -423,6 +423,47 @@ section[id] { scroll-margin-top: calc(var(--juostos-aukstis) + 12px); }
   cursor: pointer;
 }
 
+/* ---------- 3D scena ---------- */
+.scena {
+  position: relative;
+  background: var(--juoda);
+  color: var(--kremine);
+  padding-top: clamp(4rem, 9vw, 7rem);
+}
+.scena__tekstas {
+  position: relative;
+  z-index: 1;
+  max-width: var(--plotis);
+  margin: 0 auto;
+  padding: 0 var(--krastas);
+  text-align: center;
+}
+.scena .antraste { color: var(--kremine); max-width: 16ch; margin: 0 auto; }
+.scena__sakinys { max-width: 34rem; margin: 1.2rem auto 0; font-size: 1.05rem; opacity: 0.85; }
+.scena__langas {
+  position: relative;
+  height: clamp(520px, 78vh, 860px);
+  margin-top: clamp(-4rem, -4vw, -1rem);
+  overflow: hidden;
+}
+.scena__langas img, .scena__langas iframe {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border: 0;
+}
+/* Juodas kraštas viršuje ir apačioje, kad scena susilietų su skyriumi */
+.scena__langas::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(var(--juoda), transparent 14%, transparent 86%, var(--juoda));
+}
+@media (max-width: 700px) {
+  .scena__langas { height: min(118vw, 560px); margin-top: -2.5rem; }
+}
+
 /* ---------- Mokymai ---------- */
 .mokymai {
   display: grid;

@@ -1,0 +1,618 @@
+<!doctype html>
+<html lang="lt">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kompiuteris ir trylika modulių</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=JetBrains+Mono:wght@400;600&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  html, body { margin: 0; height: 100%; overflow: hidden; background: #0e0d0d; }
+  canvas { display: block; touch-action: pan-y; cursor: grab; }
+  canvas:active { cursor: grabbing; }
+</style>
+</head>
+<body>
+
+<script type="importmap">
+{ "imports": {
+  "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js",
+  "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"
+} }
+</script>
+<script type="module">
+import * as THREE from 'three';
+import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
+import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
+import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
+import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
+import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
+
+// ====== Čia keisk modulius ir tai, kas rašoma ekrane ======
+const MODULIAI = [
+  ['Pažintis su Claude', 'papasakok, ką gali padaryti už mane'],
+  ['Paruošimas su Visual Studio Code', 'sutvarkyk mano darbo aplanką'],
+  ['Kaip įdarbinti Claude Code', 'nuo šiandien tu mano asistentas'],
+  ['Taisyklės ir įgūdžiai', 'atsimink, kaip aš rašau'],
+  ['Praktiniai patarimai', 'kaip tai padaryti greičiau?'],
+  ['Instagram prijungimas', 'surink šios savaitės komentarus'],
+  ['Canva įgūdis', 'padaryk karuselę Canva'],
+  ['Automatizacijos', 'kas rytą atsiųsk dienos planą'],
+  ['Word, Excel, PowerPoint ir PDF', 'išrašyk sąskaitą PDF formatu'],
+  ['Turinio kūrėjams', 'parašyk Reels scenarijų'],
+  ['Vizualai su AI', 'sugeneruok Reels viršelį'],
+  ['Savos svetainės ir įrankiai', 'padaryk man svetainę'],
+  ['Reels montažas', 'sumontuok šitą Reels'],
+];
+const SUKIMASIS = 0.42;   // rad/s, kaip greitai moduliai sukasi aplink kompiuterį
+const ATIDARYMAS = 1.7;   // s, kiek trunka dangčio atidarymas
+const PRADZIA = 4.6;      // s, kada ekrane pradedama rašyti
+const PERIODAS = 3.4;     // s, vienas prašymas nuo rašymo iki „padaryta“
+// ===========================================================
+
+const ZALIA = '#0b4d3a', ORANZINE = '#e07b06', KREMINE = '#efe6dd';
+const params = new URLSearchParams(location.search);
+const capture = params.has('capture');
+const vienas = window.parent === window;   // atidarytas atskirai, ne svetainėje
+
+const lauk = ms => new Promise(r => setTimeout(r, ms));
+await Promise.race([
+  Promise.all([
+    document.fonts.load('400 120px "Bebas Neue"', '0123456789CLAUDEODĄ'),
+    document.fonts.load('600 34px Poppins', 'Ąąčęėįšųūž'),
+    document.fonts.load('400 34px Poppins', 'Ąąčęėįšųūž'),
+    document.fonts.load('400 34px "JetBrains Mono"', 'ąčęėįšųūž'),
+    document.fonts.load('600 34px "JetBrains Mono"', 'ąčęėįšųūž'),
+  ]),
+  lauk(3500),
+]);
+
+// ---------- Pagalbinės ----------
+const sujungti = (a, b, t) => a + (b - a) * t;
+const ribos = (x, a = 0, b = 1) => Math.min(b, Math.max(a, x));
+const lygiai = (a, b, x) => { const t = ribos((x - a) / (b - a)); return t * t * (3 - 2 * t); };
+const isLeto = t => 1 - Math.pow(1 - t, 3);
+const abipus = t => t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+
+function drobe(w, h) {
+  const c = document.createElement('canvas');
+  c.width = w; c.height = h;
+  return [c, c.getContext('2d')];
+}
+function tekstura(c) {
+  const t = new THREE.CanvasTexture(c);
+  t.colorSpace = THREE.SRGBColorSpace;
+  t.anisotropy = 4;
+  return t;
+}
+function apvaliTekstura(spalvos) {
+  const [c, x] = drobe(256, 256);
+  const g = x.createRadialGradient(128, 128, 0, 128, 128, 128);
+  spalvos.forEach(([s, sp]) => g.addColorStop(s, sp));
+  x.fillStyle = g; x.fillRect(0, 0, 256, 256);
+  return tekstura(c);
+}
+
+// ---------- Scena ----------
+const renderer = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: capture });
+renderer.setPixelRatio(Math.min(devicePixelRatio, capture ? 1 : 1.75));
+document.body.prepend(renderer.domElement);
+
+const scene = new THREE.Scene();
+{
+  // Fonas: centre smaragdinis švytėjimas, kraštuose juoda, kad susilietų su svetainės juoda dalimi
+  const [c, x] = drobe(1024, 1024);
+  const g = x.createRadialGradient(512, 560, 0, 512, 560, 540);
+  g.addColorStop(0, '#126a50'); g.addColorStop(0.3, '#0b4d3a');
+  g.addColorStop(0.62, '#082a20'); g.addColorStop(1, '#0e0d0d');
+  x.fillStyle = '#0e0d0d'; x.fillRect(0, 0, 1024, 1024);
+  x.fillStyle = g; x.fillRect(0, 0, 1024, 1024);
+  scene.background = tekstura(c);
+}
+
+const camera = new THREE.PerspectiveCamera(32, 1, 0.1, 100);
+const pasaulis = new THREE.Group();
+scene.add(pasaulis);
+
+scene.add(new THREE.HemisphereLight(0xefe6dd, 0x0b4d3a, 0.9));
+const rakto = new THREE.DirectionalLight(0xfff1e0, 2.2);
+rakto.position.set(3, 7, 5);
+scene.add(rakto);
+const oranzineSviesa = new THREE.PointLight(0xe07b06, 60, 14);
+oranzineSviesa.position.set(-3.5, 1.2, -1.5);
+scene.add(oranzineSviesa);
+const zaliaSviesa = new THREE.PointLight(0x2fae85, 50, 14);
+zaliaSviesa.position.set(3.5, 2.5, -2.5);
+scene.add(zaliaSviesa);
+
+// ---------- Kompiuteris ----------
+const kompiuteris = new THREE.Group();
+pasaulis.add(kompiuteris);
+
+const korpusas = new THREE.MeshStandardMaterial({ color: 0x232726, roughness: 0.38, metalness: 0.6 });
+const pagrindas = new THREE.Mesh(new RoundedBoxGeometry(3.2, 0.14, 2.2, 4, 0.06), korpusas);
+pagrindas.position.y = 0.07;
+kompiuteris.add(pagrindas);
+
+// Klaviatūra: 4 eilės po 13 klavišų, apačioje tarpo klavišas. Enter oranžinis.
+const klavisoMat = new THREE.MeshStandardMaterial({ color: 0x121514, roughness: 0.75, metalness: 0.1 });
+const KOL = 13, EIL = 4, ZINGSNIS = 0.205;
+const klavisai = new THREE.InstancedMesh(new RoundedBoxGeometry(0.17, 0.04, 0.17, 2, 0.02), klavisoMat, KOL * EIL);
+const klavisuVietos = [];
+const ENTER = 2 * KOL + 12;
+for (let r = 0; r < EIL; r++) for (let k = 0; k < KOL; k++) {
+  klavisuVietos.push(new THREE.Vector3((k - (KOL - 1) / 2) * ZINGSNIS, 0.155, -0.88 + r * ZINGSNIS));
+}
+const m4 = new THREE.Matrix4();
+function klavisas(i, nuspaustas) {
+  const v = klavisuVietos[i];
+  const mastas = i === ENTER ? 0 : 1;   // Enter piešiamas atskirai
+  m4.makeScale(mastas, 1, mastas).setPosition(v.x, v.y - (nuspaustas ? 0.022 : 0), v.z);
+  klavisai.setMatrixAt(i, m4);
+}
+klavisuVietos.forEach((_, i) => klavisas(i, false));
+kompiuteris.add(klavisai);
+
+const tarpas = new THREE.Mesh(new RoundedBoxGeometry(1.24, 0.04, 0.17, 2, 0.02), klavisoMat);
+tarpas.position.set(0, 0.155, -0.88 + 4 * ZINGSNIS);
+kompiuteris.add(tarpas);
+
+const enterMat = new THREE.MeshStandardMaterial({ color: ORANZINE, emissive: ORANZINE, emissiveIntensity: 0.25, roughness: 0.5 });
+const enter = new THREE.Mesh(new RoundedBoxGeometry(0.17, 0.04, 0.17, 2, 0.02), enterMat);
+enter.position.copy(klavisuVietos[ENTER]);
+kompiuteris.add(enter);
+
+const pultas = new THREE.Mesh(new RoundedBoxGeometry(1.05, 0.01, 0.62, 2, 0.005),
+  new THREE.MeshStandardMaterial({ color: 0x1a1d1c, roughness: 0.3, metalness: 0.5 }));
+pultas.position.set(0, 0.142, 0.62);
+kompiuteris.add(pultas);
+
+// Dangtis sukasi apie vyrį gale. 0 = stačias, PI/2 = uždarytas.
+const vyris = new THREE.Group();
+vyris.position.set(0, 0.14, -1.08);
+kompiuteris.add(vyris);
+const dangtis = new THREE.Mesh(new RoundedBoxGeometry(3.2, 2.1, 0.08, 4, 0.04), korpusas);
+dangtis.position.set(0, 1.05, -0.04);
+vyris.add(dangtis);
+const remelis = new THREE.Mesh(new THREE.PlaneGeometry(3.08, 1.98), new THREE.MeshBasicMaterial({ color: 0x050606 }));
+remelis.position.set(0, 1.06, 0.002);
+vyris.add(remelis);
+
+const [ekranoDrobe, ex] = drobe(1024, 640);
+const ekranoTekstura = tekstura(ekranoDrobe);
+const ekranas = new THREE.Mesh(new THREE.PlaneGeometry(2.9, 1.81),
+  new THREE.MeshBasicMaterial({ map: ekranoTekstura, toneMapped: false }));
+ekranas.position.set(0, 1.08, 0.004);
+vyris.add(ekranas);
+const ekranoSviesa = new THREE.PointLight(0x9fe0c8, 0, 4);
+ekranoSviesa.position.set(0, 1.0, 0.7);
+vyris.add(ekranoSviesa);
+
+// Švytėjimas ir šešėlis po kompiuteriu
+const grindys = new THREE.Group();
+pasaulis.add(grindys);
+function grindu(dydis, tex, opacity, additive) {
+  const m = new THREE.Mesh(new THREE.PlaneGeometry(dydis[0], dydis[1]), new THREE.MeshBasicMaterial({
+    map: tex, transparent: true, opacity, depthWrite: false,
+    blending: additive ? THREE.AdditiveBlending : THREE.NormalBlending,
+  }));
+  m.rotation.x = -Math.PI / 2;
+  grindys.add(m);
+  return m;
+}
+grindu([12, 9], apvaliTekstura([[0, 'rgba(47,174,133,0.55)'], [0.5, 'rgba(11,77,58,0.25)'], [1, 'rgba(11,77,58,0)']]), 0.9, true).position.y = -0.3;
+const oranzinesDeme = grindu([5, 3.5], apvaliTekstura([[0, 'rgba(224,123,6,0.6)'], [1, 'rgba(224,123,6,0)']]), 0.5, true);
+oranzinesDeme.position.set(0, -0.29, 0.3);
+const seselis = grindu([4.6, 3.4], apvaliTekstura([[0, 'rgba(0,0,0,0.85)'], [0.6, 'rgba(0,0,0,0.35)'], [1, 'rgba(0,0,0,0)']]), 1, false);
+seselis.position.y = -0.28;
+
+// ---------- Ekrano turinys ----------
+function apvalus(x, X, Y, W, H, R) { x.beginPath(); x.roundRect(X, Y, W, H, R); }
+
+function pieskEkrana(busena) {
+  const x = ex, W = 1024, H = 640;
+  const g = x.createLinearGradient(0, 0, 0, H);
+  g.addColorStop(0, '#0f1715'); g.addColorStop(1, '#0a0f0d');
+  x.fillStyle = g; x.fillRect(0, 0, W, H);
+
+  // viršutinė juostelė
+  x.fillStyle = '#16201d'; x.fillRect(0, 0, W, 58);
+  [ORANZINE, '#5a6e5c', '#3b4441'].forEach((s, i) => {
+    x.fillStyle = s; x.beginPath(); x.arc(36 + i * 30, 29, 9, 0, Math.PI * 2); x.fill();
+  });
+  x.fillStyle = 'rgba(239,230,221,0.45)';
+  x.font = '400 22px "JetBrains Mono", monospace';
+  x.textAlign = 'center'; x.textBaseline = 'middle';
+  x.fillText('claude code · mano-verslas', W / 2, 30);
+
+  if (busena.ikrovimas) {
+    x.textAlign = 'center';
+    x.fillStyle = KREMINE;
+    x.font = '400 150px "Bebas Neue", Impact, sans-serif';
+    x.fillText('CLAUDE CODE', W / 2, H / 2 + 6);
+    x.fillStyle = ORANZINE;
+    x.fillRect(W / 2 - 70, H / 2 + 86, 140 * busena.ikrovimas, 6);
+    x.fillStyle = 'rgba(239,230,221,0.7)';
+    x.font = '400 30px Poppins, sans-serif';
+    x.fillText('ką šiandien darom?', W / 2, H / 2 + 142);
+    return;
+  }
+
+  x.textAlign = 'left'; x.textBaseline = 'alphabetic';
+  const K = 56;
+  let y = 140;
+  // ankstesni du prašymai, blyškiau
+  busena.ankstesni.forEach(([prasymas]) => {
+    x.font = '400 28px "JetBrains Mono", monospace';
+    x.fillStyle = 'rgba(239,230,221,0.32)';
+    x.fillText('> ' + prasymas, K, y);
+    x.fillStyle = 'rgba(224,123,6,0.5)';
+    x.fillText('✓ padaryta', K, y + 42);
+    y += 108;
+  });
+
+  // dabartinis
+  y += 44;
+  x.font = '600 40px "JetBrains Mono", monospace';
+  x.fillStyle = ORANZINE;
+  x.fillText('>', K, y);
+  x.fillStyle = KREMINE;
+  const parasyta = busena.tekstas;
+  x.fillText(parasyta, K + 46, y);
+  if (busena.zymeklis) {
+    const w = x.measureText(parasyta).width;
+    x.fillStyle = ORANZINE;
+    x.fillRect(K + 52 + w, y - 34, 20, 44);
+  }
+  y += 74;
+  x.font = '400 32px "JetBrains Mono", monospace';
+  if (busena.dirba) {
+    const taskai = '·'.repeat(busena.dirba);
+    x.fillStyle = '#3fbf94';
+    x.fillText('● dirbu' + taskai, K, y);
+  } else if (busena.padaryta) {
+    x.fillStyle = ORANZINE;
+    x.font = '600 34px "JetBrains Mono", monospace';
+    x.fillText('✓ padaryta', K, y);
+    x.font = '400 27px "JetBrains Mono", monospace';
+    x.fillStyle = 'rgba(239,230,221,0.6)';
+    x.fillText(busena.modulis, K, y + 50);
+  }
+}
+
+let paskutinisRaktas = '';
+// Kiekvienam prašymui parenkamas modulis, kuris „padaryta“ akimirką bus priekyje, kad švytėjimas visada matytųsi.
+// Kartą parinktas įsimenamas, kad pasukus pirštu ekrano istorija nesikeistų.
+const parinkti = new Map();
+function kuris(n) {
+  if (parinkti.has(n)) return parinkti.get(n);
+  const momentas = PRADZIA + n * PERIODAS + 2.6;
+  let geriausias = 0, maziausias = Infinity;
+  MODULIAI.forEach((_, i) => {
+    const kampas = (i / MODULIAI.length) * Math.PI * 2 + momentas * SUKIMASIS + pasukimas;
+    const nuo = Math.abs(Math.atan2(Math.sin(kampas - Math.PI / 2), Math.cos(kampas - Math.PI / 2)));
+    if (nuo < maziausias) { maziausias = nuo; geriausias = i; }
+  });
+  // tas pats modulis du kartus iš eilės neatrodo gyvai
+  if (n > 0 && parinkti.get(n - 1) === geriausias) geriausias = (geriausias + 1) % MODULIAI.length;
+  parinkti.set(n, geriausias);
+  return geriausias;
+}
+function ekranoBusena(t) {
+  if (t < PRADZIA) {
+    const r = lygiai(1.2, PRADZIA - 0.4, t);
+    return { raktas: 'i' + Math.round(r * 40), ikrovimas: Math.max(0.02, r) };
+  }
+  const n = Math.floor((t - PRADZIA) / PERIODAS);
+  const p = (t - PRADZIA) - n * PERIODAS;
+  const k = kuris(n);
+  const [pavadinimas, prasymas] = MODULIAI[k];
+  const ankstesni = [n - 2, n - 1].filter(j => j >= 0).map(j => MODULIAI[kuris(j)]);
+  const raides = Math.floor(prasymas.length * ribos((p - 0.25) / 1.4));
+  const rasoma = p < 1.65;
+  const zymeklis = rasoma && (p > 0.25 && p < 1.65 ? true : Math.floor(t * 3) % 2 === 0);
+  const dirba = p >= 1.65 && p < 2.3 ? 1 + Math.floor((p - 1.65) * 6) % 3 : 0;
+  const padaryta = p >= 2.3;
+  const modulis = `modulis ${String(k + 1).padStart(2, '0')} · ${pavadinimas}`;
+  return {
+    raktas: [n, raides, zymeklis, dirba, padaryta].join('|'),
+    tekstas: prasymas.slice(0, raides), zymeklis, dirba, padaryta, modulis, ankstesni,
+    k, p, raides, rasoma,
+  };
+}
+
+// ---------- Moduliai ----------
+function pieskModuli(i, pavadinimas) {
+  const [c, x] = drobe(512, 320);
+  apvalus(x, 4, 4, 504, 312, 30);
+  const g = x.createLinearGradient(0, 0, 512, 320);
+  g.addColorStop(0, '#13201c'); g.addColorStop(1, '#0c1210');
+  x.fillStyle = g; x.fill();
+  x.lineWidth = 4; x.strokeStyle = 'rgba(63,191,148,0.45)'; x.stroke();
+
+  x.textBaseline = 'alphabetic'; x.textAlign = 'left';
+  x.fillStyle = ORANZINE;
+  x.font = '400 128px "Bebas Neue", Impact, sans-serif';
+  x.fillText(String(i + 1).padStart(2, '0'), 34, 134);
+  x.fillStyle = 'rgba(239,230,221,0.45)';
+  x.font = '600 17px Poppins, sans-serif';
+  x.textAlign = 'right';
+  x.fillText('M O D U L I S', 476, 54);
+
+  // pavadinimas laužomas į eilutes
+  x.textAlign = 'left';
+  let dydis = 36;
+  let eilutes;
+  do {
+    x.font = `600 ${dydis}px Poppins, sans-serif`;
+    eilutes = [];
+    let e = '';
+    for (const z of pavadinimas.split(' ')) {
+      const bandom = e ? e + ' ' + z : z;
+      if (x.measureText(bandom).width > 444 && e) { eilutes.push(e); e = z; } else e = bandom;
+    }
+    eilutes.push(e);
+    dydis -= 2;
+  } while (eilutes.length > 2 && dydis > 24);
+  x.fillStyle = KREMINE;
+  const eil = dydis * 1.25;
+  eilutes.forEach((e, j) => x.fillText(e, 34, 290 - (eilutes.length - 1 - j) * eil));
+  return tekstura(c);
+}
+
+const svytejimoTekstura = apvaliTekstura([[0, 'rgba(224,123,6,0.95)'], [0.45, 'rgba(224,123,6,0.35)'], [1, 'rgba(224,123,6,0)']]);
+const plokstesGeo = new RoundedBoxGeometry(1.25, 0.78, 0.04, 3, 0.05);
+const plokstesMat = new THREE.MeshStandardMaterial({ color: 0x0f1513, roughness: 0.5, metalness: 0.3 });
+const moduliai = MODULIAI.map(([pavadinimas], i) => {
+  const grupe = new THREE.Group();
+  const svyti = new THREE.Mesh(new THREE.PlaneGeometry(1.9, 1.35), new THREE.MeshBasicMaterial({
+    map: svytejimoTekstura, transparent: true, opacity: 0, depthWrite: false, blending: THREE.AdditiveBlending,
+  }));
+  svyti.position.z = -0.06;
+  grupe.add(svyti);
+  grupe.add(new THREE.Mesh(plokstesGeo, plokstesMat));
+  const veidas = new THREE.Mesh(new THREE.PlaneGeometry(1.25, 0.78),
+    new THREE.MeshBasicMaterial({ map: pieskModuli(i, pavadinimas), transparent: true, toneMapped: false }));
+  veidas.position.z = 0.022;
+  grupe.add(veidas);
+  const vidus = new THREE.Group();   // vidinė grupė svyruoja, išorinė žiūri į kamerą
+  vidus.add(grupe);
+  pasaulis.add(vidus);
+  return { vidus, grupe, svyti };
+});
+
+// ---------- Dulkės ----------
+const DULKIU = 650;
+const dulkiuGeo = new THREE.BufferGeometry();
+const dulkiuVietos = new Float32Array(DULKIU * 3);
+const dulkiuPradzia = new Float32Array(DULKIU * 3);
+const dulkiuSpalvos = new Float32Array(DULKIU * 3);
+const kr = new THREE.Color(KREMINE), or = new THREE.Color(ORANZINE), zl = new THREE.Color('#3fbf94');
+let seklas = 7;
+const atsitiktinis = () => (seklas = (seklas * 16807) % 2147483647) / 2147483647;
+for (let i = 0; i < DULKIU; i++) {
+  dulkiuPradzia.set([(atsitiktinis() - 0.5) * 16, atsitiktinis() * 7 - 1.5, (atsitiktinis() - 0.5) * 11 - 1.5], i * 3);
+  const r = atsitiktinis();
+  dulkiuSpalvos.set((r < 0.25 ? or : r < 0.45 ? zl : kr).toArray(), i * 3);
+}
+dulkiuGeo.setAttribute('position', new THREE.BufferAttribute(dulkiuVietos, 3));
+dulkiuGeo.setAttribute('color', new THREE.BufferAttribute(dulkiuSpalvos, 3));
+const taskoTekstura = apvaliTekstura([[0, 'rgba(255,255,255,1)'], [0.35, 'rgba(255,255,255,0.5)'], [1, 'rgba(255,255,255,0)']]);
+const dulkes = new THREE.Points(dulkiuGeo, new THREE.PointsMaterial({
+  size: 0.07, map: taskoTekstura, vertexColors: true, transparent: true, opacity: 0.75,
+  depthWrite: false, blending: THREE.AdditiveBlending,
+}));
+scene.add(dulkes);
+
+// ---------- Kibirkščių lankas nuo ekrano iki modulio ----------
+const LANKO = 42;
+const lankoGeo = new THREE.BufferGeometry();
+const lankoVietos = new Float32Array(LANKO * 3);
+lankoGeo.setAttribute('position', new THREE.BufferAttribute(lankoVietos, 3));
+const lankoMat = new THREE.PointsMaterial({
+  size: 0.13, map: taskoTekstura, color: 0xffa040, transparent: true, opacity: 0,
+  depthWrite: false, blending: THREE.AdditiveBlending,
+});
+scene.add(new THREE.Points(lankoGeo, lankoMat));
+
+// ---------- Efektai ----------
+const composer = new EffectComposer(renderer);
+composer.addPass(new RenderPass(scene, camera));
+const svytejimas = new UnrealBloomPass(new THREE.Vector2(256, 256), 0.55, 0.7, 0.62);
+composer.addPass(svytejimas);
+composer.addPass(new OutputPass());
+
+// ---------- Dydis ----------
+let statmenas = false, spindulys = 3.6;
+let kameraNuo = new THREE.Vector3(), kameraI = new THREE.Vector3();
+function dydis() {
+  const w = innerWidth, h = innerHeight;
+  renderer.setSize(w, h);
+  composer.setSize(w, h);
+  camera.aspect = w / h;
+  statmenas = camera.aspect < 0.95;
+  spindulys = statmenas ? 2.3 : 3.4;
+  camera.fov = statmenas ? 46 : 32;
+  kameraI.set(0, statmenas ? 3.5 : 3.2, statmenas ? 9.2 : 10.2);
+  kameraNuo.copy(kameraI).multiplyScalar(1.22);
+  camera.updateProjectionMatrix();
+}
+addEventListener('resize', dydis);
+dydis();
+
+// ---------- Pelė ir pirštas: pakreipia, o tempiant pasuka ----------
+const pele = { x: 0, y: 0, tx: 0, ty: 0 };
+let pasukimas = 0, greitis = 0, tempia = false, buvesX = 0;
+const drobeEl = renderer.domElement;
+drobeEl.addEventListener('pointermove', e => {
+  pele.tx = (e.clientX / innerWidth) * 2 - 1;
+  pele.ty = (e.clientY / innerHeight) * 2 - 1;
+  if (tempia) {
+    const dx = e.clientX - buvesX;
+    buvesX = e.clientX;
+    greitis = dx * 0.006;
+    pasukimas += greitis;
+  }
+});
+drobeEl.addEventListener('pointerdown', e => { tempia = true; buvesX = e.clientX; drobeEl.setPointerCapture(e.pointerId); });
+const paleisk = () => { tempia = false; };
+drobeEl.addEventListener('pointerup', paleisk);
+drobeEl.addEventListener('pointercancel', paleisk);
+drobeEl.addEventListener('pointerleave', () => { pele.tx = 0; pele.ty = 0; });
+
+// ---------- Vienas kadras: viskas skaičiuojama iš laiko t ----------
+const tmp = new THREE.Vector3(), ekranoCentras = new THREE.Vector3(), tikslas = new THREE.Vector3();
+const lankoA = new THREE.Vector3(), lankoB = new THREE.Vector3(), lankoC = new THREE.Vector3();
+let buvesKlavisas = -1;
+
+function orbita(i, t, kur) {
+  const kampas = (i / MODULIAI.length) * Math.PI * 2 + t * SUKIMASIS + pasukimas;
+  kur.set(
+    Math.cos(kampas) * spindulys,
+    1.05 - Math.sin(kampas) * (statmenas ? 1.35 : 0.95) + Math.sin(t * 1.3 + i * 1.7) * 0.06,
+    Math.sin(kampas) * spindulys * 0.78,
+  );
+  return kur;
+}
+
+function kadras(t) {
+  // kamera priartėja
+  const k = isLeto(ribos(t / 3.2));
+  camera.position.lerpVectors(kameraNuo, kameraI, k);
+  pele.x = sujungti(pele.x, pele.tx, 0.06);
+  pele.y = sujungti(pele.y, pele.ty, 0.06);
+  camera.position.x += pele.x * 0.6;
+  camera.position.y -= pele.y * 0.35;
+  camera.lookAt(0, statmenas ? 1.0 : 0.85, 0);
+
+  if (!tempia) { greitis *= 0.94; pasukimas += greitis; }
+  kompiuteris.rotation.y = Math.sin(t * 0.25) * 0.16 + pasukimas * 0.35;
+  kompiuteris.position.y = Math.sin(t * 0.9) * 0.05;
+  grindys.position.y = 0;
+  seselis.material.opacity = 1 - kompiuteris.position.y * 2;
+
+  // dangtis
+  const atidaryta = abipus(lygiai(0.35, 0.35 + ATIDARYMAS, t));
+  vyris.rotation.x = sujungti(Math.PI / 2 - 0.02, -0.26, atidaryta);
+  ekranoSviesa.intensity = 6 * atidaryta;
+
+  // ekranas perpiešiamas tik pasikeitus tekstui
+  const eb = ekranoBusena(t);
+  if (eb.raktas !== paskutinisRaktas) {
+    paskutinisRaktas = eb.raktas;
+    pieskEkrana(eb);
+    ekranoTekstura.needsUpdate = true;
+  }
+
+  // klavišai spaudžiami rašant, Enter užsidega baigus
+  let nuspaustas = -1;
+  if (eb.rasoma && eb.raides > 0 && eb.raides < MODULIAI[eb.k][1].length) {
+    nuspaustas = (eb.raides * 7 + eb.k * 11) % (KOL * EIL);
+    if (nuspaustas === ENTER) nuspaustas = 0;
+  }
+  if (nuspaustas !== buvesKlavisas) {
+    if (buvesKlavisas >= 0) klavisas(buvesKlavisas, false);
+    if (nuspaustas >= 0) klavisas(nuspaustas, true);
+    buvesKlavisas = nuspaustas;
+    klavisai.instanceMatrix.needsUpdate = true;
+  }
+  const enterSpaud = eb.p !== undefined && eb.p >= 1.6 && eb.p < 1.85;
+  enter.position.y = klavisuVietos[ENTER].y - (enterSpaud ? 0.022 : 0);
+  const enterSvytis = eb.p !== undefined ? lygiai(1.55, 1.7, eb.p) * (1 - lygiai(2.2, 3.0, eb.p)) : 0;
+  enterMat.emissiveIntensity = 0.25 + enterSvytis * 1.6;
+
+  // ekrano centras pasaulyje, iš jo išskrenda moduliai
+  pasaulis.updateMatrixWorld(true);
+  ekranoCentras.set(0, 1.08, 0.1);
+  ekranas.parent.localToWorld(ekranoCentras);
+  const ekranoVietinis = pasaulis.worldToLocal(ekranoCentras.clone());
+
+  const aktyvus = eb.k ?? -1;
+  const stiprumas = eb.p !== undefined ? lygiai(1.7, 2.35, eb.p) * (1 - lygiai(2.95, 3.4, eb.p)) : 0;
+
+  moduliai.forEach((m, i) => {
+    const startas = 1.6 + i * 0.2;
+    const e = ribos((t - startas) / 1.25);
+    m.vidus.visible = e > 0;
+    if (!m.vidus.visible) return;
+    orbita(i, t, tikslas);
+    const s = i === aktyvus ? stiprumas : 0;
+    if (s > 0) {
+      // aktyvus modulis išnyra į priekį ir šiek tiek arčiau kameros
+      tmp.set(tikslas.x, 0, tikslas.z).normalize().multiplyScalar(0.45 * s);
+      tikslas.add(tmp);
+      tikslas.y += 0.25 * s;
+    }
+    const ee = abipus(e);
+    m.vidus.position.lerpVectors(ekranoVietinis, tikslas, ee);
+    m.vidus.position.y += Math.sin(ee * Math.PI) * 1.0;
+    m.vidus.position.z += Math.sin(ee * Math.PI) * 1.4;
+    const mastas = sujungti(0.1, 1, isLeto(e)) * (1 + 0.28 * s) * (statmenas ? 0.78 : 0.8);
+    m.vidus.scale.setScalar(mastas);
+    m.vidus.lookAt(camera.position);
+    m.grupe.rotation.z = Math.sin(t * 0.8 + i) * 0.05 + (1 - ee) * 0.6;
+    m.grupe.rotation.y = (1 - ee) * Math.PI * 1.2;
+    m.svyti.material.opacity = s * 0.8;
+  });
+
+  // kibirkštys skrenda nuo ekrano iki aktyvaus modulio
+  const lankas = eb.p !== undefined ? lygiai(1.62, 1.8, eb.p) * (1 - lygiai(2.3, 2.6, eb.p)) : 0;
+  lankoMat.opacity = lankas;
+  if (lankas > 0 && aktyvus >= 0) {
+    lankoA.copy(ekranoCentras);
+    moduliai[aktyvus].vidus.getWorldPosition(lankoB);
+    lankoC.addVectors(lankoA, lankoB).multiplyScalar(0.5);
+    lankoC.y += 1.3; lankoC.z += 0.6;
+    for (let j = 0; j < LANKO; j++) {
+      const u = ((j / LANKO) + t * 1.6) % 1;
+      const a = (1 - u) * (1 - u), b = 2 * (1 - u) * u, c = u * u;
+      lankoVietos[j * 3] = a * lankoA.x + b * lankoC.x + c * lankoB.x;
+      lankoVietos[j * 3 + 1] = a * lankoA.y + b * lankoC.y + c * lankoB.y + Math.sin(j * 12.9) * 0.03;
+      lankoVietos[j * 3 + 2] = a * lankoA.z + b * lankoC.z + c * lankoB.z;
+    }
+    lankoGeo.attributes.position.needsUpdate = true;
+  }
+
+  // dulkės lėtai kyla
+  for (let i = 0; i < DULKIU; i++) {
+    const y0 = dulkiuPradzia[i * 3 + 1];
+    dulkiuVietos[i * 3] = dulkiuPradzia[i * 3] + Math.sin(t * 0.3 + i) * 0.15;
+    dulkiuVietos[i * 3 + 1] = ((y0 + 1.5 + t * 0.12) % 7) - 1.5;
+    dulkiuVietos[i * 3 + 2] = dulkiuPradzia[i * 3 + 2];
+  }
+  dulkiuGeo.attributes.position.needsUpdate = true;
+
+  oranzineSviesa.intensity = 60 + stiprumas * 50;
+  composer.render();
+}
+
+// ---------- Laikas ----------
+// Svetainė praneša, kada scena matosi. Atidarius atskirai, sukasi iš karto.
+let veikia = vienas && !capture;
+addEventListener('message', e => {
+  if (e.data === 'rodomas') veikia = true;
+  if (e.data === 'pasleptas') veikia = false;
+});
+document.addEventListener('visibilitychange', () => { if (document.hidden) buvo = null; });
+
+let laikas = 0, buvo = null;
+function ciklas(dabar) {
+  requestAnimationFrame(ciklas);
+  if (!veikia) { buvo = null; return; }
+  const dt = buvo === null ? 0 : Math.min(0.05, (dabar - buvo) / 1000);
+  buvo = dabar;
+  laikas += dt;
+  kadras(laikas);
+}
+
+if (capture) {
+  window.seek = t => { kadras(t); kadras(t); };
+  window.paruosta = true;
+} else {
+  kadras(0);
+  requestAnimationFrame(ciklas);
+}
+</script>
+</body>
+</html>
