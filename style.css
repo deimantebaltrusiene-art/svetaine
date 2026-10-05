@@ -66,6 +66,7 @@ a { color: inherit; }
 }
 .mygtukas:hover { transform: translateY(-2px); background: #ee8a12; }
 .mygtukas:active { transform: translateY(1px) scale(0.98); }
+button.mygtukas { border: 0; cursor: pointer; }
 .mygtukas--mazas { min-height: 38px; padding: 0 1.1rem; font-size: 0.85rem; }
 .mygtukas--kontūras {
   background: transparent;

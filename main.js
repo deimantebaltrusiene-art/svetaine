@@ -103,3 +103,19 @@ if (langas) {
   // paspaudus šalia žinutės, langas užsidaro
   langas.addEventListener('click', e => { if (e.target === langas) langas.close(); });
 }
+
+// ---- El. paštas nusikopijuoja, o ne atidaro pašto programą (pas daugelį ji neįjungta) ----
+document.querySelectorAll('[data-kopijuoti]').forEach(mygtukas => {
+  const tekstas = mygtukas.textContent;
+  mygtukas.addEventListener('click', async () => {
+    try {
+      await navigator.clipboard.writeText(mygtukas.dataset.kopijuoti);
+      mygtukas.textContent = 'Nukopijuota ✓';
+    } catch {
+      // jei naršyklė neleidžia kopijuoti, bent pažymim adresą, kad būtų lengva nusikopijuoti ranka
+      window.getSelection().selectAllChildren(mygtukas);
+      return;
+    }
+    setTimeout(() => { mygtukas.textContent = tekstas; }, 2000);
+  });
+});
