@@ -3,23 +3,33 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Anksčiau reikėjo mokėti viską | @deimante_living</title>
-<meta name="description" content="Reels montažas, karuselės, sąskaitos, automatinės žinutės ir net ši svetainė. Viską padariau su Claude Code: pasakau paprastais žodžiais, ko noriu, o jis padaro.">
-<meta name="theme-color" content="#0b4d3a">
-<meta property="og:title" content="Anksčiau reikėjo mokėti viską. Dabar man užtenka vieno įrankio.">
-<meta property="og:description" content="Tikri darbai, padaryti su Claude Code: nuo reels montažo iki sąskaitų. Mokymai ir individualios konsultacijos. @deimante_living">
+<title>Dirbi vienas ir nieko nespėji? | @deimante_living</title>
+<meta name="description" content="Susikurk savo AI komandą su Claude Code. Rutiną atiduodi jai, kūryba lieka tau. Mokymai lietuviškai, nuo nulio, programuoti mokėti nereikia.">
+<meta name="theme-color" content="#1a3429">
+<meta property="og:title" content="Dirbi vienas ir nieko nespėji? Susikurk savo AI komandą su Claude Code.">
+<meta property="og:description" content="Reels montažas, karuselės, sąskaitos, automatinės žinutės ir net ši svetainė. Mokymai ir individualios konsultacijos. @deimante_living">
 <meta property="og:image" content="media/portretas.jpg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Newsreader:ital,opsz,wght@1,6..72,400&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=2026-11-11e">
+<link rel="preload" as="image" href="media/stalas/kilimelis.webp">
+<link rel="stylesheet" href="style.css?v=stalas-8">
+<!--
+THESIS: svetainė yra Deimantės darbo stalas iš viršaus. Ne skyrių kaladė su kortelėmis, o vienas stalas, ant kurio Claude Code komanda (oranžiniai robotukai) atlieka tikrus darbus.
+OWN-WORLD: gilios žalios veltinio kilimėlis per visą puslapį, tikri iškirpti daiktai su šešėliu į dešinę, kremo popieriaus lapai, oranžinė tik varnelėms, kainai ir mygtukui. Bebas, Poppins, Newsreader ranka rašytiems užrašams.
+STORY: lankytojas mato, kaip prašymas kompiuteryje tampa daiktu ant stalo; susipažįsta su komanda; pamato reels efektus, atsiliepimus, 14 modulių; robotukai nuspiria seną kainą; spaudžia „Noriu išmokti ir aš“.
+FIRST VIEWPORT: kairėje „DIRBI VIENAS IR NIEKO NESPĖJI?“, sakinys, oranžinis mygtukas; dešinėje kompiuteris su terminalu, telefonas su reels, knygelė su darbų sąrašu, kava. Daiktus galima tempti.
+FORM: W5 „Darbo stalas iš viršaus“, 6-a struktūra iš 7, seed 96308478.
+-->
 </head>
 <body>
+
+<a class="praleisti" href="#turinys">Pereiti prie turinio</a>
 
 <header class="juosta">
   <a class="juosta__vardas" href="#">DEIMANTE_LIVING</a>
   <nav class="juosta__meniu" aria-label="Pagrindinis meniu">
-    <a href="#darbai">Darbai</a>
+    <a href="#komanda">Komanda</a>
     <a href="#reels">Reels</a>
     <a href="#atsiliepimai">Atsiliepimai</a>
     <a href="#mokymai">Mokymai</a>
@@ -28,303 +38,285 @@
   <a class="mygtukas mygtukas--mazas" href="https://stan.store/deimante_living/p/tavo-antroji-deinioji-ranka" target="_blank" rel="noopener">Noriu išmokti ir aš</a>
 </header>
 
-<main>
+<main id="turinys">
 
-  <!-- 1. Pirmas ekranas -->
-  <section class="herojus" aria-labelledby="antraste">
-    <video class="herojus__video" muted playsinline loop preload="auto" aria-hidden="true"
-      data-plati="media/hero-plati.mp4" data-plati-poster="media/hero-plati.jpg"
-      data-stati="media/hero-stati.mp4" data-stati-poster="media/hero-stati.jpg"></video>
-    <div class="herojus__uzdanga" aria-hidden="true"></div>
+  <!-- 1. Stalas: prašymas kompiuteryje tampa daiktu ant stalo -->
+  <section class="stalas" aria-labelledby="antraste">
+    <div class="stalas__tekstas">
+      <h1 id="antraste" class="stalas__antraste">Dirbi vienas ir nieko nespėji?</h1>
+      <p class="stalas__sakinys">Susikurk savo AI komandą su Claude Code. Rutiną atiduodi jai, o kūryba lieka tau. Programuoti mokėti nereikia.</p>
+      <div class="stalas__veiksmai">
+        <a class="mygtukas" href="https://stan.store/deimante_living/p/tavo-antroji-deinioji-ranka" target="_blank" rel="noopener">Noriu išmokti ir aš</a>
+        <a class="nuoroda" href="#komanda">Susipažink su komanda</a>
+      </div>
+    </div>
 
-    <div class="herojus__turinys">
-      <h1 id="antraste" class="herojus__antraste" data-rasyti>Anksčiau reikėjo mokėti viską. Dabar man užtenka vieno įrankio.</h1>
-      <p class="herojus__tekstas">Reels montažas, karuselės, sąskaitos ir net ši svetainė. Pasakau Claude Code paprastais lietuviškais žodžiais, ko noriu, o visa kita jis padaro pats 🫶 Šito išmoksi ir tu, net jei pradedi nuo nulio.</p>
-      <a class="mygtukas" href="https://stan.store/deimante_living/p/tavo-antroji-deinioji-ranka" target="_blank" rel="noopener">Noriu išmokti ir aš</a>
+    <div class="scena" data-scena>
+      <div class="daiktas daiktas--sakele" data-daiktas>
+        <img src="media/stalas/sakele.webp" width="300" height="584" alt="" draggable="false">
+      </div>
+
+      <!-- popieriai išlenda iš po kompiuterio, kai darbas atliktas -->
+      <figure class="daiktas lapas lapas--saskaita" data-daiktas data-lapas="saskaitos" aria-hidden="true">
+        <img src="media/saskaitos.jpg" width="1200" height="800" alt="" draggable="false">
+      </figure>
+      <figure class="daiktas lapas lapas--karusele" data-daiktas data-lapas="karusele" aria-hidden="true">
+        <img src="media/karusele.jpg" width="900" height="1125" alt="" draggable="false">
+      </figure>
+
+      <div class="daiktas daiktas--kompiuteris" data-daiktas>
+        <img src="media/stalas/kompiuteris.webp" width="1000" height="1356" alt="Atidarytas kompiuteris ant žalio stalo" draggable="false">
+        <div class="kompiuteris__ekranas" aria-live="polite">
+          <p class="ekranas__galva"><span>Claude Code</span><span>~/mano-darbai</span></p>
+          <div class="ekranas__eilutes" data-terminalas></div>
+        </div>
+      </div>
+
+      <div class="daiktas daiktas--telefonas" data-daiktas>
+        <img src="media/stalas/telefonas.webp" width="480" height="957" alt="Telefonas, kuriame groja sumontuotas reels" draggable="false">
+        <div class="telefonas__ekranas">
+          <video data-telefonas muted playsinline loop preload="none" poster="media/efektai/01-kabliukas-uz-galvos.jpg" aria-hidden="true"></video>
+        </div>
+      </div>
+
+      <div class="daiktas daiktas--knygele" data-daiktas>
+        <img src="media/stalas/knygele.webp" width="1000" height="746" alt="" draggable="false">
+        <div class="knygele__lapas">
+          <p class="knygele__data">Šiandien</p>
+          <ul class="knygele__sarasas">
+            <li data-uzduotis="reels">sumontuoti reels</li>
+            <li data-uzduotis="saskaitos">išrašyti sąskaitas</li>
+            <li data-uzduotis="karusele">karuselė apie skilsus</li>
+            <li data-uzduotis="zinutes">atsakyti į GIDAS</li>
+          </ul>
+          <p class="knygele__pastaba">o aš geriu kavą</p>
+        </div>
+      </div>
+
+      <div class="daiktas daiktas--puodelis" data-daiktas>
+        <img src="media/stalas/puodelis.webp" width="520" height="552" alt="" draggable="false">
+      </div>
     </div>
   </section>
 
-  <!-- 1. Apie mane -->
-  <section class="apie" aria-label="Apie mane">
-    <figure class="apie__foto">
-      <img src="media/portretas.jpg" width="928" height="1152" alt="Deimantė tamsiai žaliu kostiumu sėdi ant kėdės žalioje studijoje" loading="lazy">
+  <!-- 2. Anksčiau ir dabar -->
+  <section class="istorija" aria-labelledby="istorija-antraste">
+    <figure class="nuotrauka">
+      <img src="media/portretas.jpg" width="928" height="1152" alt="Deimantė tamsiai žaliu kostiumu sėdi ant kėdės" loading="lazy">
+      <figcaption>Deimantė, @deimante_living</figcaption>
     </figure>
-    <div class="apie__tekstas">
-      <p class="mintis">Man nebereikia visko mokėti. Užtenka žinoti, ko noriu.</p>
-      <p class="apie__sakinys">Esu Deimantė. Turinio kūrėja, mokytoja ir vienintelė savo verslo darbuotoja 😀</p>
-      <p class="apie__sakinys"><strong>Anksčiau:</strong> kiekvienam darbui reikėjo daug žinoti ir daug mokėti. Tekstai, dizainas, sąskaitos ir marketingas gulė ant mano galvos, o laiko turėjau tik nuo 9 iki 15 val.</p>
-      <p class="apie__sakinys"><strong>Dabar:</strong> paprastais lietuviškais žodžiais pasakau, ko noriu, Claude Code padaro, o aš peržiūriu. Būtent to ir mokau kitus.</p>
+    <div class="istorija__tekstas">
+      <h2 id="istorija-antraste" class="antraste">Esu Deimantė. Ir dirbu viena.</h2>
+      <p class="istorija__ivadas">Turinio kūrėja, mokytoja ir vienintelė savo verslo darbuotoja.</p>
+
+      <div class="jungiklis" role="group" aria-label="Kaip dirbu">
+        <button type="button" class="jungiklis__mygtukas" data-laikas="anksciau" aria-pressed="false">Anksčiau</button>
+        <button type="button" class="jungiklis__mygtukas" data-laikas="dabar" aria-pressed="true">Dabar</button>
+        <span class="jungiklis__rutulys" aria-hidden="true"></span>
+      </div>
+      <div class="laikai">
+        <ul class="laikas" data-laikas-turinys="anksciau" hidden>
+          <li>Tekstus, dizainą, sąskaitas ir marketingą dariau pati.</li>
+          <li>Kiekvienam darbui reikėjo daug žinoti ir daug mokėti.</li>
+          <li>Laiko turėjau tik nuo 9 iki 15 val.</li>
+        </ul>
+        <ul class="laikas" data-laikas-turinys="dabar">
+          <li>Paprastais lietuviškais žodžiais pasakau, ko noriu.</li>
+          <li>Claude Code padaro, o aš peržiūriu ir kuriu.</li>
+          <li>Būtent to ir mokau kitus.</li>
+        </ul>
+      </div>
+      <blockquote class="citata">Man nebereikia visko mokėti. Užtenka žinoti, ko noriu.</blockquote>
     </div>
   </section>
 
-  <!-- 2. Vitrina -->
-  <section class="vitrina" id="darbai" aria-labelledby="vitrina-antraste">
-    <div class="vitrina__galva">
-      <h2 id="vitrina-antraste" class="antraste">Štai ką padariau</h2>
-      <p class="vitrina__ivadas">Ne pažadai. Tikri darbai iš mano kasdienybės.</p>
+  <!-- 3. Komanda: kiekvienas robotukas yra vienas darbas -->
+  <section class="komanda" id="komanda" aria-labelledby="komanda-antraste">
+    <div class="komanda__galva">
+      <h2 id="komanda-antraste" class="antraste">Mano AI komanda</h2>
+      <p>Kiekvienas robotukas yra vienas darbas, kurį atidaviau Claude Code. Paspausk bet kurį ir pažiūrėk, ką jis padarė.</p>
     </div>
 
-    <div class="bento">
-      <article class="darbas darbas--reels">
-        <div class="darbas__vaizdas">
-          <video data-matomas muted playsinline loop preload="none" poster="media/reels.jpg" aria-label="Sumontuotas Reels „Claude Code dirba už mane“">
-            <source src="media/reels.mp4" type="video/mp4">
-          </video>
+    <ul class="robotai" data-robotai>
+      <li><button type="button" class="robotas-mygtukas" data-darbas="montuotojas" aria-pressed="true"><span class="robotas" aria-hidden="true"></span><span class="robotas__vardas">Montuotojas</span><span class="robotas__darbas">reels</span></button></li>
+      <li><button type="button" class="robotas-mygtukas" data-darbas="dizaineris" aria-pressed="false"><span class="robotas" aria-hidden="true"></span><span class="robotas__vardas">Dizaineris</span><span class="robotas__darbas">karuselės</span></button></li>
+      <li><button type="button" class="robotas-mygtukas" data-darbas="buhalteris" aria-pressed="false"><span class="robotas" aria-hidden="true"></span><span class="robotas__vardas">Buhalteris</span><span class="robotas__darbas">sąskaitos</span></button></li>
+      <li><button type="button" class="robotas-mygtukas" data-darbas="pastininkas" aria-pressed="false"><span class="robotas" aria-hidden="true"></span><span class="robotas__vardas">Paštininkas</span><span class="robotas__darbas">žinutės</span></button></li>
+      <li><button type="button" class="robotas-mygtukas" data-darbas="maketuotojas" aria-pressed="false"><span class="robotas" aria-hidden="true"></span><span class="robotas__vardas">Maketuotojas</span><span class="robotas__darbas">PDF gidai</span></button></li>
+      <li><button type="button" class="robotas-mygtukas" data-darbas="reklamininkas" aria-pressed="false"><span class="robotas" aria-hidden="true"></span><span class="robotas__vardas">Reklamininkas</span><span class="robotas__darbas">reklama</span></button></li>
+      <li><button type="button" class="robotas-mygtukas" data-darbas="kurejas" aria-pressed="false"><span class="robotas" aria-hidden="true"></span><span class="robotas__vardas">Kūrėjas</span><span class="robotas__darbas">svetainės</span></button></li>
+    </ul>
+
+    <div class="eksponatas" aria-live="polite">
+      <article class="darbas" data-darbas-turinys="montuotojas">
+        <div class="darbas__vaizdas darbas__vaizdas--stati"><video data-matomas muted playsinline loop preload="none" poster="media/reels.jpg" aria-label="Sumontuotas reels „Claude Code dirba už mane“"><source src="media/reels.mp4" type="video/mp4"></video></div>
+        <div class="darbas__tekstas">
+          <h3>Reels montažas</h3>
+          <p>Įmetu nufilmuotą video, o Claude Code sumontuoja: kirpimai, subtitrai, efektai, nuotraukos ir garsai. Viskas taip, kaip aš noriu.</p>
+          <a class="nuoroda" href="#reels">Išbandyk efektus</a>
         </div>
-        <h3>Reels montažas</h3>
-        <p>Įmetu nufilmuotą video, o Claude Code sumontuoja: kirpimai, subtitrai, efektai, nuotraukos ir garsai. Viskas taip, kaip aš noriu.</p>
-        <a class="darbas__nuoroda" href="#reels">Išbandyk efektus</a>
       </article>
-
-      <article class="darbas darbas--karusele">
-        <div class="darbas__vaizdas">
-          <img src="media/karusele.jpg" width="900" height="1125" alt="Karuselės viršelis „Pradėjau nuo kito galo“" loading="lazy">
+      <article class="darbas" data-darbas-turinys="dizaineris" hidden>
+        <div class="darbas__vaizdas darbas__vaizdas--stati"><img src="media/karusele.jpg" width="900" height="1125" alt="Karuselės viršelis „Pradėjau nuo kito galo“" loading="lazy"></div>
+        <div class="darbas__tekstas">
+          <h3>Karuselės su mano nuotraukomis</h3>
+          <p>Aprašau idėją, o skaidres su mano šriftais ir spalvomis sudeda Claude Code. Man lieka pasirinkti nuotrauką ir paskelbti.</p>
         </div>
-        <h3>Karuselės su mano nuotraukomis</h3>
-        <p>Aprašau idėją, o skaidres su mano šriftais ir spalvomis sudeda Claude Code.</p>
       </article>
-
-      <article class="darbas darbas--zinutes">
-        <p class="darbas__zodis" aria-hidden="true">GIDAS</p>
-        <h3>Automatinės žinutės</h3>
-        <p>Parašai komentare GIDAS ir iškart gauni žinutę su nuoroda. Automatiką pastatė Claude Code.</p>
-      </article>
-
-      <article class="darbas darbas--saskaitos">
-        <div class="darbas__vaizdas darbas__vaizdas--saskaitos">
-          <img src="media/saskaitos.jpg" width="1200" height="800" alt="Trys pavyzdinės sąskaitos faktūros su užrašu PAVYZDYS" loading="lazy">
+      <article class="darbas" data-darbas-turinys="buhalteris" hidden>
+        <div class="darbas__vaizdas"><img src="media/saskaitos.jpg" width="1200" height="800" alt="Trys pavyzdinės sąskaitos faktūros su užrašu PAVYZDYS" loading="lazy"></div>
+        <div class="darbas__tekstas">
+          <h3>Sąskaitos faktūros</h3>
+          <p>Programėlė iš Stan pardavimų failo išrašo sąskaitas PDF formatu ir veda jų žurnalą. Programėlę sukūrė Claude Code.</p>
         </div>
-        <h3>Sąskaitos faktūros</h3>
-        <p>Programėlė iš Stan pardavimų failo išrašo sąskaitas PDF formatu ir veda jų žurnalą.</p>
       </article>
-
-      <article class="darbas darbas--gidai">
+      <article class="darbas" data-darbas-turinys="pastininkas" hidden>
+        <div class="darbas__vaizdas darbas__vaizdas--zodis"><p aria-hidden="true">GIDAS</p></div>
+        <div class="darbas__tekstas">
+          <h3>Automatinės žinutės</h3>
+          <p>Parašai komentare GIDAS ir iškart gauni žinutę su nuoroda. Automatiką ManyChat programoje sustatė Claude Code.</p>
+        </div>
+      </article>
+      <article class="darbas" data-darbas-turinys="maketuotojas" hidden>
         <div class="darbas__vaizdas darbas__vaizdas--pora">
           <img src="media/gidas.jpg" width="775" height="1096" alt="Gido „Antroji dešinioji ranka“ viršelis" loading="lazy">
           <img src="media/dovana.jpg" width="700" height="990" alt="Dovanos „Trys darbuotojai“ pirmas puslapis" loading="lazy">
         </div>
-        <h3>Gidai PDF formatu</h3>
-        <p>21 puslapio gidas ir 9 puslapių dovana, sumaketuoti su mano nuotraukomis ir veikiančiais mygtukais.</p>
-      </article>
-
-      <article class="darbas darbas--svetaine">
-        <div>
-          <p class="darbas__didelis">Ir ši svetainė.</p>
-          <p>Ją irgi padarė Claude Code. Man tereikėjo pasakyti, ko noriu 🤭</p>
+        <div class="darbas__tekstas">
+          <h3>Gidai PDF formatu</h3>
+          <p>21 puslapio gidas ir 9 puslapių dovana, sumaketuoti su mano nuotraukomis ir veikiančiais mygtukais.</p>
         </div>
-        <div class="robotukai" data-robotukai="5" aria-hidden="true"></div>
+      </article>
+      <article class="darbas" data-darbas-turinys="reklamininkas" hidden>
+        <div class="darbas__vaizdas darbas__vaizdas--stati"><video data-matomas muted playsinline loop preload="none" poster="media/meta-higgsfield.jpg" aria-label="Ant skardinės „Mėta“ krenta apelsinų skiltelės ir mėtų lapeliai"><source src="media/meta-higgsfield.mp4" type="video/mp4"></video></div>
+        <div class="darbas__tekstas">
+          <h3>Reklama be fotostudijos</h3>
+          <p>Šio gėrimo nėra. Jį sugalvojo Claude Code, o video sukūrė prijungęs Higgsfield. Lygiai taip pat ir tu gali susikurti judančią reklamą savo produktui.</p>
+        </div>
+      </article>
+      <article class="darbas" data-darbas-turinys="kurejas" hidden>
+        <div class="darbas__vaizdas darbas__vaizdas--zodis darbas__vaizdas--svetaine"><p aria-hidden="true">IR ŠI<br>SVETAINĖ.</p></div>
+        <div class="darbas__tekstas">
+          <h3>Svetainės ir savi įrankiai</h3>
+          <p>Šią svetainę irgi sukūrė Claude Code. Man tereikėjo pasakyti, ko noriu, ir nuspręsti, kas patinka.</p>
+        </div>
       </article>
     </div>
   </section>
 
-
-  <!-- 2a. Reels montažas: paspaudi prašymą, telefone atsiranda efektas -->
+  <!-- 4. Reels montažas: prašymo lapelis telefone virsta efektu -->
   <section class="reels" id="reels" aria-labelledby="reels-antraste">
-    <div class="reels__vidus">
-      <div class="reels__tekstas">
-        <p class="zyma">Reels montažas</p>
-        <h2 id="reels-antraste" class="antraste">Pasakai žodžiais. Reels sumontuotas.</h2>
-        <p class="reels__ivadas">Nufilmuoju video telefonu ir parašau, ko noriu. Claude Code iškerpa pauzes, uždeda subtitrus mano šriftu ir prideda efektų. Viskas vyksta mano kompiuteryje, be kreditų. Paspausk bet kurį prašymą ir pažiūrėk.</p>
-      </div>
+    <div class="reels__tekstas">
+      <h2 id="reels-antraste" class="antraste">Pasakai žodžiais. Reels sumontuotas.</h2>
+      <p>Nufilmuoju video telefonu ir parašau, ko noriu. Claude Code iškerpa pauzes, uždeda subtitrus mano šriftu ir prideda efektų. Viskas vyksta mano kompiuteryje, be kreditų.</p>
+      <p class="reels__atsakymas" data-atsakymas aria-live="polite">Paspausk lapelį su prašymu.</p>
+    </div>
 
-      <figure class="telefonas">
-        <div class="telefonas__ekranas">
-          <video class="telefonas__video" muted playsinline loop preload="none" poster="media/efektai/01-kabliukas-uz-galvos.jpg" aria-hidden="true"></video>
-          <video class="telefonas__video" muted playsinline loop preload="none" aria-hidden="true"></video>
+    <div class="reels__telefonas">
+      <div class="didelis-telefonas">
+        <img src="media/stalas/telefonas.webp" width="480" height="957" alt="" draggable="false">
+        <div class="didelis-telefonas__ekranas">
+          <video class="efektas" muted playsinline loop preload="none" poster="media/efektai/04-zurnalo-virselis.jpg" aria-hidden="true"></video>
+          <video class="efektas" muted playsinline loop preload="none" aria-hidden="true"></video>
         </div>
-        <figcaption class="telefonas__pavadinimas" data-efektas aria-live="polite">Kabliukas už galvos</figcaption>
-      </figure>
-
-      <div class="terminalas">
-        <div class="terminalas__galva" aria-hidden="true"><span>Claude Code</span><span>reels / mano-video.mp4</span></div>
-        <p class="terminalas__ivestis" aria-hidden="true"><span class="terminalas__zenklas">&gt;</span><span data-ivestis>Kabliuką parašyk už mano galvos</span><span class="zymeklis"></span></p>
-        <p class="terminalas__atsakymas" data-atsakymas>✓ Padaryta: kabliukas už galvos.</p>
-        <ul class="terminalas__prasymai" aria-label="Pasirink, ką Claude Code turi padaryti">
-          <li><button type="button" data-efektas-video="00-paprastas-montazas" data-pavadinimas="Paprastas montažas" data-atsakymas="pauzės iškirptos, subtitrai uždėti." aria-pressed="false">Iškirpk pauzes ir uždėk subtitrus</button></li>
-          <li><button type="button" data-efektas-video="01-kabliukas-uz-galvos" data-pavadinimas="Kabliukas už galvos" data-atsakymas="kabliukas už galvos." aria-pressed="true">Kabliuką parašyk už mano galvos</button></li>
-          <li><button type="button" data-efektas-video="04-zurnalo-virselis" data-pavadinimas="Žurnalo viršelis" data-atsakymas="kadras tapo žurnalo viršeliu." aria-pressed="false">Padaryk iš kadro žurnalo viršelį</button></li>
-          <li><button type="button" data-efektas-video="03-sviesa-tik-ant-manes" data-pavadinimas="Šviesa tik ant manęs" data-atsakymas="šviesa liko tik ant tavęs." aria-pressed="false">Palik šviesą tik ant manęs</button></li>
-          <li><button type="button" data-efektas-video="05-kino-juosta" data-pavadinimas="Kino juosta" data-atsakymas="tu kino juostoje." aria-pressed="false">Įdėk mane į kino juostą</button></li>
-          <li><button type="button" data-efektas-video="06-sustojes-kadras-su-rodykle" data-pavadinimas="Sustojęs kadras su rodykle" data-atsakymas="kadras sustoja, rodyklė rodo tave." aria-pressed="false">Sustabdyk kadrą ir parodyk mane rodykle</button></li>
-          <li><button type="button" data-efektas-video="08-reels-aplink-galva" data-pavadinimas="Reels aplink galvą" data-atsakymas="tavo reels skraido aplink galvą." aria-pressed="false">Tegul aplink galvą skraido mano reels</button></li>
-          <li><button type="button" data-efektas-video="10-cekis-su-uzduotimi" data-pavadinimas="Čekis su užduotimi" data-atsakymas="užduotis išspausdinta kaip čekis." aria-pressed="false">Užduotį parodyk kaip čekį</button></li>
-          <li><button type="button" data-efektas-video="13-milziniski-subtitrai" data-pavadinimas="Milžiniški subtitrai" data-atsakymas="subtitrai per visą ekraną." aria-pressed="false">Subtitrus padaryk milžiniškus</button></li>
-          <li><button type="button" data-efektas-video="14-lenteles-su-numeriais" data-pavadinimas="Lentelės su numeriais" data-atsakymas="sąrašas sudėtas į lenteles su numeriais." aria-pressed="false">Išvardink lentelėmis su numeriais</button></li>
-        </ul>
       </div>
+      <p class="reels__pavadinimas" data-efektas>Žurnalo viršelis</p>
     </div>
 
-    <div class="reels__budai">
-      <div class="budas">
-        <h3>Paprastas montažas</h3>
-        <p>Kirpimai, subtitrai ir kadras, kuriame veidas visada toje pačioje vietoje. Kasdieniams reels užtenka ir šito.</p>
-      </div>
-      <div class="budas">
-        <h3>Su efektais</h3>
-        <p>Kabliukas už galvos, žurnalo viršelis, kino juosta ir dar daugiau. Prieš montuodamas parodo eskizų lentą, kad galėtum pakomentuoti.</p>
-      </div>
-      <div class="budas">
-        <h3>Instagram Edits programoje</h3>
-        <p>Mac kompiuteryje Claude Code moka valdyti ir pačią Edits programą: sudeda kadrus, subtitrus ir lipdukus ten, kur įprastai darytum rankomis.</p>
-      </div>
-    </div>
-    <div class="reels__kvietimas">
-      <p>Reels montažą žingsnis po žingsnio rodau 13 modulyje.</p>
-      <a class="mygtukas" href="https://stan.store/deimante_living/p/tavo-antroji-deinioji-ranka" target="_blank" rel="noopener">Noriu išmokti ir aš</a>
-    </div>
+    <ul class="lapeliai" aria-label="Prašymai Claude Code">
+      <li><button type="button" data-efektas-video="00-paprastas-montazas" data-pavadinimas="Paprastas montažas" data-atsakymas="pauzės iškirptos, subtitrai uždėti." aria-pressed="false">Iškirpk pauzes ir uždėk subtitrus</button></li>
+      <li><button type="button" data-efektas-video="01-kabliukas-uz-galvos" data-pavadinimas="Kabliukas už galvos" data-atsakymas="kabliukas už galvos." aria-pressed="false">Kabliuką parašyk už mano galvos</button></li>
+      <li><button type="button" data-efektas-video="04-zurnalo-virselis" data-pavadinimas="Žurnalo viršelis" data-atsakymas="kadras tapo žurnalo viršeliu." aria-pressed="true">Padaryk iš kadro žurnalo viršelį</button></li>
+      <li><button type="button" data-efektas-video="03-sviesa-tik-ant-manes" data-pavadinimas="Šviesa tik ant manęs" data-atsakymas="šviesa liko tik ant tavęs." aria-pressed="false">Palik šviesą tik ant manęs</button></li>
+      <li><button type="button" data-efektas-video="05-kino-juosta" data-pavadinimas="Kino juosta" data-atsakymas="tu kino juostoje." aria-pressed="false">Įdėk mane į kino juostą</button></li>
+      <li><button type="button" data-efektas-video="06-sustojes-kadras-su-rodykle" data-pavadinimas="Sustojęs kadras su rodykle" data-atsakymas="kadras sustoja, rodyklė rodo tave." aria-pressed="false">Sustabdyk kadrą ir parodyk mane rodykle</button></li>
+      <li><button type="button" data-efektas-video="08-reels-aplink-galva" data-pavadinimas="Reels aplink galvą" data-atsakymas="tavo reels skraido aplink galvą." aria-pressed="false">Tegul aplink galvą skraido mano reels</button></li>
+      <li><button type="button" data-efektas-video="10-cekis-su-uzduotimi" data-pavadinimas="Čekis su užduotimi" data-atsakymas="užduotis išspausdinta kaip čekis." aria-pressed="false">Užduotį parodyk kaip čekį</button></li>
+      <li><button type="button" data-efektas-video="13-milziniski-subtitrai" data-pavadinimas="Milžiniški subtitrai" data-atsakymas="subtitrai per visą ekraną." aria-pressed="false">Subtitrus padaryk milžiniškus</button></li>
+      <li><button type="button" data-efektas-video="14-lenteles-su-numeriais" data-pavadinimas="Lentelės su numeriais" data-atsakymas="sąrašas sudėtas į lenteles su numeriais." aria-pressed="false">Išvardink lentelėmis su numeriais</button></li>
+    </ul>
+
+    <p class="reels__budai">Paprastas montažas kasdieniams reels, montažas su efektais, o Mac kompiuteryje net pačioje Instagram Edits programoje. Viską rodau 13 modulyje.</p>
   </section>
 
-  <!-- 3. Atsiliepimai -->
+  <!-- 5. Atsiliepimai: tikros žinutės, išbarstytos ant stalo -->
   <section class="atsiliepimai" id="atsiliepimai" aria-labelledby="atsiliepimai-antraste">
-    <div class="atsiliepimai__vidus">
+    <div class="atsiliepimai__galva">
       <h2 id="atsiliepimai-antraste" class="antraste">Jie irgi galvojo, kad čia ne jiems</h2>
+      <blockquote class="citata citata--didele">„Patys geriausi pinigai, kuriuos galėjau išleisti.“</blockquote>
+      <p class="atsiliepimai__po">Po mokymų atsirado dar viena pora rankų ir dar viena galva. Paspausk žinutę, kad perskaitytum visą.</p>
+    </div>
 
-      <figure class="citata">
-        <blockquote class="citata__tekstas">„Patys geriausi pinigai, kuriuos galėjau išleisti.“</blockquote>
-        <figcaption class="citata__po">Po mokymų atsirado dar viena pora rankų ir dar viena galva.</figcaption>
-        <button class="atsiliepimas__atidaryti" type="button" data-zinute="media/atsiliepimai/a10.webp" data-w="720" data-h="922">Skaityti visą žinutę</button>
-      </figure>
-
-      <div class="atsiliepimai__tinklelis">
-        <figure class="atsiliepimas">
-          <blockquote class="mintis">„Aš tikrai nesuprantu programavimo, bet jau darau stebuklus!“</blockquote>
-          <button class="atsiliepimas__atidaryti" type="button" data-zinute="media/atsiliepimai/a09.webp" data-w="720" data-h="1095">Skaityti visą žinutę</button>
-        </figure>
-        <figure class="atsiliepimas">
-          <blockquote class="mintis">„Jis pats viską perkelia pagal aplankus į kietąjį diską, o aš kavą geriu 😄“</blockquote>
-          <button class="atsiliepimas__atidaryti" type="button" data-zinute="media/atsiliepimai/a12.webp" data-w="720" data-h="248">Skaityti visą žinutę</button>
-        </figure>
-        <figure class="atsiliepimas">
-          <blockquote class="mintis">„Per du su puse mėnesio padariau daugiau nei anksčiau per pusmetį“</blockquote>
-          <button class="atsiliepimas__atidaryti" type="button" data-zinute="media/atsiliepimai/a08.webp" data-w="720" data-h="790">Skaityti visą žinutę</button>
-        </figure>
-        <figure class="atsiliepimas">
-          <blockquote class="mintis">„Per penkias minutes jis rado priežastį. Pati tikrai nebūčiau to atradusi“</blockquote>
-          <button class="atsiliepimas__atidaryti" type="button" data-zinute="media/atsiliepimai/a05.webp" data-w="720" data-h="927">Skaityti visą žinutę</button>
-        </figure>
-        <figure class="atsiliepimas">
-          <blockquote class="mintis">„Be Claude code jau neįsivaizduoju savo dienos“</blockquote>
-          <button class="atsiliepimas__atidaryti" type="button" data-zinute="media/atsiliepimai/a07.webp" data-w="720" data-h="725">Skaityti visą žinutę</button>
-        </figure>
-        <figure class="atsiliepimas">
-          <blockquote class="mintis">„Nemėgdavau vektorizuoti… vakar šį mano vargą perleidau Code, kokias 7 min truko jis“</blockquote>
-          <button class="atsiliepimas__atidaryti" type="button" data-zinute="media/atsiliepimai/a02.webp" data-w="720" data-h="359">Skaityti visą žinutę</button>
-        </figure>
-        <figure class="atsiliepimas">
-          <blockquote class="mintis">„Jau spėjau susikurti kelis įrankius savo kompiuteryje, kurie gerokai pagreitina kasdienius darbus“</blockquote>
-          <button class="atsiliepimas__atidaryti" type="button" data-zinute="media/atsiliepimai/a04.webp" data-w="720" data-h="434">Skaityti visą žinutę</button>
-        </figure>
-        <figure class="atsiliepimas">
-          <blockquote class="mintis">„Viska padare jis aš tik sakiau noriu, kaip viskas turi atrodyti.“</blockquote>
-          <button class="atsiliepimas__atidaryti" type="button" data-zinute="media/atsiliepimai/a06.webp" data-w="720" data-h="285">Skaityti visą žinutę</button>
-        </figure>
-      </div>
-      <a class="mygtukas" href="https://stan.store/deimante_living/p/tavo-antroji-deinioji-ranka" target="_blank" rel="noopener">Noriu išmokti ir aš</a>
+    <div class="kruva" data-kruva>
+      <button type="button" class="daiktas zinutes-lapas" data-daiktas data-zinute="media/atsiliepimai/a10.webp" data-w="720" data-h="922" style="--x:1%;--y:2%;--r:-4deg"><img src="media/atsiliepimai/a10.webp" width="720" height="922" alt="Atsiliepimas: patys geriausi pinigai, kuriuos galėjau išleisti" loading="lazy" draggable="false"></button>
+      <button type="button" class="daiktas zinutes-lapas" data-daiktas data-zinute="media/atsiliepimai/a09.webp" data-w="720" data-h="1095" style="--x:25%;--y:8%;--r:3deg"><img src="media/atsiliepimai/a09.webp" width="720" height="1095" alt="Atsiliepimas: aš tikrai nesuprantu programavimo, bet jau darau stebuklus" loading="lazy" draggable="false"></button>
+      <button type="button" class="daiktas zinutes-lapas" data-daiktas data-zinute="media/atsiliepimai/a08.webp" data-w="720" data-h="790" style="--x:50%;--y:0%;--r:-2deg"><img src="media/atsiliepimai/a08.webp" width="720" height="790" alt="Atsiliepimas: per du su puse mėnesio padariau daugiau nei anksčiau per pusmetį" loading="lazy" draggable="false"></button>
+      <button type="button" class="daiktas zinutes-lapas" data-daiktas data-zinute="media/atsiliepimai/a05.webp" data-w="720" data-h="927" style="--x:74%;--y:7%;--r:4deg"><img src="media/atsiliepimai/a05.webp" width="720" height="927" alt="Atsiliepimas: per penkias minutes jis rado priežastį" loading="lazy" draggable="false"></button>
+      <button type="button" class="daiktas zinutes-lapas" data-daiktas data-zinute="media/atsiliepimai/a07.webp" data-w="720" data-h="725" style="--x:6%;--y:55%;--r:2deg"><img src="media/atsiliepimai/a07.webp" width="720" height="725" alt="Atsiliepimas: be Claude Code jau neįsivaizduoju savo dienos" loading="lazy" draggable="false"></button>
+      <button type="button" class="daiktas zinutes-lapas" data-daiktas data-zinute="media/atsiliepimai/a12.webp" data-w="720" data-h="248" style="--x:33%;--y:64%;--r:-3deg"><img src="media/atsiliepimai/a12.webp" width="720" height="248" alt="Atsiliepimas: jis pats viską perkelia į kietąjį diską, o aš kavą geriu" loading="lazy" draggable="false"></button>
+      <button type="button" class="daiktas zinutes-lapas" data-daiktas data-zinute="media/atsiliepimai/a02.webp" data-w="720" data-h="359" style="--x:60%;--y:56%;--r:2deg"><img src="media/atsiliepimai/a02.webp" width="720" height="359" alt="Atsiliepimas: vektorizavimą perleidau Claude Code, užtruko apie 7 minutes" loading="lazy" draggable="false"></button>
+      <button type="button" class="daiktas zinutes-lapas" data-daiktas data-zinute="media/atsiliepimai/a04.webp" data-w="720" data-h="434" style="--x:42%;--y:82%;--r:-1deg"><img src="media/atsiliepimai/a04.webp" width="720" height="434" alt="Atsiliepimas: jau susikūriau kelis įrankius, kurie pagreitina kasdienius darbus" loading="lazy" draggable="false"></button>
     </div>
   </section>
 
   <dialog class="zinute" aria-label="Visa žinutė">
-    <img alt="Žinutės ekrano nuotrauka su visu atsiliepimu" src="" width="720" height="900">
+    <img src="media/atsiliepimai/a10.webp" alt="Žinutės ekrano nuotrauka su visu atsiliepimu" width="720" height="922">
     <button class="zinute__uzdaryti" type="button" aria-label="Uždaryti">×</button>
   </dialog>
 
-  <!-- 4. 3D reklama produktui -->
-  <section class="scena scena--produktas" aria-labelledby="produktas-antraste">
-    <div class="scena__tekstas">
-      <p class="zyma">Ir 3D reklamos</p>
-      <h2 id="produktas-antraste" class="antraste">Reklama be fotostudijos</h2>
-      <p class="scena__sakinys">Šio gėrimo nėra. Jį sugalvojo ir nupiešė Claude Code, be fotografo, be 3D programos ir be AI kreditų. Lygiai taip pat ir tu gali susikurti judančią reklamą savo produktui, Reels foną ar sceną savo svetainei.</p>
-      <a class="mygtukas" href="https://stan.store/deimante_living/p/tavo-antroji-deinioji-ranka" target="_blank" rel="noopener">Noriu išmokti ir aš</a>
-      <p class="scena__uzuomina">Pasuk skardinę pirštu arba pele.</p>
-    </div>
-    <div class="scena__langas" data-scena="3d/produktas.html" data-pavadinimas="Besisukanti gėrimo skardinė su mėtų lapeliais ir apelsinų skiltelėmis">
-      <picture>
-        <source media="(max-aspect-ratio: 1/1)" srcset="media/produktas-stati.jpg">
-        <img src="media/produktas.jpg" width="1600" height="1000" alt="Žalia gėrimo skardinė „Mėta“ virš pakylos, aplink skraido mėtų lapeliai ir apelsinų skiltelės" loading="lazy">
-      </picture>
-    </div>
-
-    <div class="palyginimas">
-      <div class="palyginimas__tekstas">
-        <p class="palyginimas__zyma">Su prijungtu įrankiu</p>
-        <h3 class="palyginimas__antraste">O čia ta pati „Mėta“ per Higgsfield</h3>
-        <p>3D sceną viršuje Claude Code sugalvojo, nupiešė kodu ir parodė, be jokių kreditų. Šį video jis sukūrė pats, tik prijungęs papildomą įrankį: Higgsfield, AI video programą. Vaisiai krenta ir nusileidžia ant pakylos, o užrašas lieka nesugadintas. Mokymuose parodau ir jį, bet jis nebūtinas: be jo išmoksi viską.</p>
-      </div>
-      <div class="palyginimas__video">
-        <video data-matomas muted playsinline loop preload="none" poster="media/meta-higgsfield.jpg" aria-label="Ant skardinės „Mėta“ krenta apelsinų skiltelės ir mėtų lapeliai, nusileidžia ant pakylos">
-          <source src="media/meta-higgsfield.mp4" type="video/mp4">
-        </video>
-      </div>
-    </div>
-  </section>
-
-  <!-- 5. 3D scena: iš kompiuterio išskrenda visi moduliai -->
-  <section class="scena" aria-labelledby="scena-antraste">
-    <div class="scena__tekstas">
-      <p class="zyma">Kas laukia mokymuose</p>
-      <h2 id="scena-antraste" class="antraste">Keturiolika modulių, vienas kompiuteris</h2>
-      <p class="scena__sakinys">Kiekviename modulyje išmoksti vieną darbą perduoti Claude Code. Pasuk kompiuterį pirštu arba pele.</p>
-    </div>
-    <div class="scena__langas" data-scena="3d/kompiuteris.html" data-pavadinimas="Kompiuteris, iš kurio išskrenda keturiolika mokymų modulių">
-      <picture>
-        <source media="(max-aspect-ratio: 1/1)" srcset="media/kompiuteris-stati.jpg">
-        <img src="media/kompiuteris.jpg" width="1600" height="1000" alt="Atidarytas kompiuteris, aplink jį sukasi mokymų modulių kortelės" loading="lazy">
-      </picture>
-    </div>
-  </section>
-
-  <!-- 6. Mokymai ir kvietimas -->
+  <!-- 6. Mokymai: 14 modulių kaip užrašų knygelės turinys -->
   <section class="mokymai" id="mokymai" aria-labelledby="mokymai-antraste">
-    <div class="mokymai__kaire">
+    <div class="mokymai__galva">
       <h2 id="mokymai-antraste" class="antraste">Tavo antroji dešinioji ranka</h2>
       <p class="mokymai__poantraste">Claude Code nuo nulio</p>
-      <p class="mokymai__ivadas">Keturiolika modulių su vaizdo pamokomis, kuriose viską rodau ekrane. Rutiną atiduodi Claude Code, o kūryba lieka tau. Ne teoriškai, o savo kompiuteryje, savo darbams.</p>
-      <p class="mintis">Šiandien reikia mokėti vieną: kaip su juo kalbėtis.</p>
-
-      <ol class="moduliai">
-        <li>Kuo Claude skiriasi nuo ChatGPT</li>
-        <li>Claude Code paruošimas nuo nulio</li>
-        <li>Ką iš tikrųjų gali jam liepti</li>
-        <li>Taisyklės ir skilsai, kad dirbtų tavo stiliumi</li>
-        <li>Patarimai, kad būtų mažiau nervų</li>
-        <li>Instagram: auditas, strategija, promptai</li>
-        <li>Canva ir tavo prekės ženklo stilius</li>
-        <li>ManyChat automatizacijos</li>
-        <li>Word, Excel, PowerPoint ir PDF failai</li>
-        <li>Du įrankiai kasdieniam turiniui</li>
-        <li>Nuotraukos ir vaizdai su AI</li>
-        <li>Svetainė ir savi įrankiai kompiuteryje</li>
-        <li>Reels montažas su Claude Code</li>
-        <li>Pasiimk mano skilsus</li>
-      </ol>
+      <p>Keturiolika modulių su vaizdo pamokomis, kuriose viską rodau ekrane. Ne teoriškai, o savo kompiuteryje, savo darbams. Paspausk modulį ir pamatysi, ką po jo galėsi pasakyti Claude Code.</p>
     </div>
 
-    <aside class="kaina" aria-label="Kaina ir prisijungimas">
-      <img class="kaina__foto" src="media/mokymai.jpg" width="1400" height="781" alt="Deimantė ant sofos su kompiuteriu" loading="lazy">
-      <div class="kaina__vidus">
-        <p class="kaina__suma">97 €</p>
-        <p class="kaina__nuolaida">Dabar su nuolaida, vietoj <s>147 €</s></p>
-        <p class="kaina__prieiga">Sumoki vieną kartą ir gauni:</p>
-        <ul class="kaina__gauni">
-          <li>Prieigą prie mokymų visam laikui ir visus naujus modulius be papildomo mokesčio.</li>
-          <li>Paruoštus promptus ir skilsus: nusikopijuoji ir naudoji.</li>
-          <li>Gyvus Zoom susitikimus su manimi bent kartą per du mėnesius.</li>
-          <li>Bendruomenę, kurioje gali klausti bet ko ir sulauki atsakymo.</li>
-        </ul>
-        <a class="mygtukas" href="https://stan.store/deimante_living/p/tavo-antroji-deinioji-ranka" target="_blank" rel="noopener">Noriu išmokti ir aš</a>
-      </div>
-    </aside>
-
-    <div class="gidas">
-      <p>Dar neapsisprendei? Pradėk nuo nemokamo gido apie Claude, Cowork ir Claude Code.</p>
-      <a class="mygtukas mygtukas--kontūras" href="https://stan.store/deimante_living/p/claude-code-tavo-antroji-deinioji-ranka" target="_blank" rel="noopener">Parsisiųsk nemokamą gidą</a>
+    <div class="turinys-lapas">
+      <p class="turinys-lapas__prasymas" aria-live="polite"><span class="turinys-lapas__zenklas" aria-hidden="true">&gt;</span><span data-prasymas>papasakok, ką gali padaryti už mane</span></p>
+      <ol class="moduliai">
+        <li><button type="button" data-prasymas="papasakok, ką gali padaryti už mane" aria-pressed="true">Kuo Claude skiriasi nuo ChatGPT</button></li>
+        <li><button type="button" data-prasymas="sutvarkyk mano darbo aplanką" aria-pressed="false">Claude Code paruošimas nuo nulio</button></li>
+        <li><button type="button" data-prasymas="nuo šiandien tu mano asistentas" aria-pressed="false">Ką iš tikrųjų gali jam liepti</button></li>
+        <li><button type="button" data-prasymas="atsimink, kaip aš rašau" aria-pressed="false">Taisyklės ir skilsai, kad dirbtų tavo stiliumi</button></li>
+        <li><button type="button" data-prasymas="kaip tai padaryti greičiau?" aria-pressed="false">Patarimai, kad būtų mažiau nervų</button></li>
+        <li><button type="button" data-prasymas="padaryk mano paskyros auditą" aria-pressed="false">Instagram: auditas, strategija, promptai</button></li>
+        <li><button type="button" data-prasymas="padaryk karuselę Canva" aria-pressed="false">Canva ir tavo prekės ženklo stilius</button></li>
+        <li><button type="button" data-prasymas="kas parašys GIDAS, nusiųsk nuorodą" aria-pressed="false">ManyChat automatizacijos</button></li>
+        <li><button type="button" data-prasymas="išrašyk sąskaitą PDF formatu" aria-pressed="false">Word, Excel, PowerPoint ir PDF failai</button></li>
+        <li><button type="button" data-prasymas="surask, kas šią savaitę populiaru mano nišoje" aria-pressed="false">Du įrankiai kasdieniam turiniui</button></li>
+        <li><button type="button" data-prasymas="sugeneruok reels viršelį" aria-pressed="false">Nuotraukos ir vaizdai su AI</button></li>
+        <li><button type="button" data-prasymas="sukurk man svetainę" aria-pressed="false">Svetainė ir savi įrankiai kompiuteryje</button></li>
+        <li><button type="button" data-prasymas="sumontuok šitą reels" aria-pressed="false">Reels montažas su Claude Code</button></li>
+        <li><button type="button" data-prasymas="pasiimk mano skilsą reels montažui" aria-pressed="false">Pasiimk mano skilsus</button></li>
+      </ol>
     </div>
   </section>
 
-  <!-- 7. Klausimai prieš perkant -->
+  <!-- 7. Kaina: robotukai nuspiria seną kainą -->
+  <section class="kaina" aria-labelledby="kaina-antraste">
+    <h2 id="kaina-antraste" class="sr">Kaina</h2>
+    <div class="kaina__scena" data-kaina>
+      <canvas aria-hidden="true"></canvas>
+      <p class="kaina__suma"><span class="kaina__nauja">97 €</span> <span class="kaina__sena">vietoj <s>147 €</s></span></p>
+    </div>
+    <div class="kaina__lapas">
+      <p class="kaina__nuolaida">Dabar gali prisijungti su nuolaida. Sumoki vieną kartą ir gauni:</p>
+      <ul class="kaina__gauni">
+        <li>Prieigą prie mokymų visam laikui ir visus naujus modulius be papildomo mokesčio.</li>
+        <li>Paruoštus promptus ir skilsus: nusikopijuoji ir naudoji.</li>
+        <li>Gyvus Zoom susitikimus su manimi bent kartą per du mėnesius.</li>
+        <li>Bendruomenę, kurioje gali klausti bet ko ir sulauki atsakymo.</li>
+      </ul>
+      <a class="mygtukas mygtukas--didelis" href="https://stan.store/deimante_living/p/tavo-antroji-deinioji-ranka" target="_blank" rel="noopener">Noriu išmokti ir aš</a>
+      <p class="kaina__gidas">Dar neapsisprendei? <a class="nuoroda nuoroda--tamsi" href="https://stan.store/deimante_living/p/claude-code-tavo-antroji-deinioji-ranka" target="_blank" rel="noopener">Parsisiųsk nemokamą gidą</a></p>
+    </div>
+  </section>
+
+  <!-- 8. Klausimai -->
   <section class="duk" aria-labelledby="duk-antraste">
-    <div class="duk__vidus">
-      <h2 id="duk-antraste" class="antraste">Dažniausi klausimai</h2>
+    <h2 id="duk-antraste" class="antraste">Dažniausi klausimai</h2>
+    <div class="duk__sarasas">
       <details class="duk__klausimas">
         <summary>Ar man tiks, jei nemoku programuoti?</summary>
         <p>Taip. Programuoti mokėti nereikia. Mokymai lietuviškai ir pradedami nuo nulio, o su Claude Code kalbi paprastais žodžiais. Vienas atsiliepimas taip ir prasideda: „Aš tikrai nesuprantu programavimo, bet jau darau stebuklus!“</p>
@@ -345,64 +337,52 @@
         <summary>Ar išmoksiu montuoti reels?</summary>
         <p>Taip, tam skirtas visas 13 modulis. Claude Code iš tavo telefono video iškerpa pauzes, uždeda subtitrus tavo šriftu ir, jei nori, prideda efektų. Viskas vyksta tavo kompiuteryje, kreditų nereikia.</p>
       </details>
-      <a class="mygtukas" href="https://stan.store/deimante_living/p/tavo-antroji-deinioji-ranka" target="_blank" rel="noopener">Noriu išmokti ir aš</a>
     </div>
   </section>
 
-  <!-- 8. Konsultacija -->
+  <!-- 9. Konsultacija: vizitinė kortelė ant stalo -->
   <section class="konsultacija" id="konsultacija" aria-labelledby="konsultacija-antraste">
-    <div class="konsultacija__vidus">
-      <div class="konsultacija__tekstas">
-        <p class="zyma">Individuali konsultacija</p>
-        <h2 id="konsultacija-antraste" class="antraste">Vienas ant vieno, prie tavo darbo</h2>
-        <p class="konsultacija__ivadas">Susėdam ir žiūrim į tai, ką tu darai kasdien. Parodau, kaip Claude Code pritaikyti būtent tavo užduotims, žingsnis po žingsnio ir paprastais žodžiais.</p>
-        <ul class="konsultacija__sarasas">
-          <li>Randam, kurie darbai tau atima daugiausiai laiko.</li>
-          <li>Parodau, kaip juos perduoti Claude Code paprastais žodžiais.</li>
-          <li>Išeini su aiškiu planu, nuo ko pradėti.</li>
-        </ul>
+    <div class="konsultacija__tekstas">
+      <h2 id="konsultacija-antraste" class="antraste">Vienas ant vieno, prie tavo darbo</h2>
+      <p>Susėdam ir žiūrim į tai, ką tu darai kasdien. Parodau, kaip Claude Code pritaikyti būtent tavo užduotims, žingsnis po žingsnio ir paprastais žodžiais.</p>
+      <ul class="konsultacija__sarasas">
+        <li>Randam, kurie darbai tau atima daugiausiai laiko.</li>
+        <li>Parodau, kaip juos perduoti Claude Code.</li>
+        <li>Išeini su aiškiu planu, nuo ko pradėti.</li>
+      </ul>
+    </div>
+    <div class="vizitine">
+      <p class="vizitine__vardas">Individuali konsultacija</p>
+      <p class="vizitine__suma">150 €</p>
+      <p class="vizitine__laikas">už valandą</p>
+      <p class="vizitine__tekstas">Užsiregistruoti ar paklausti gali taip, kaip tau patogiau. Atsakau visiems ir greitai.</p>
+      <div class="vizitine__kontaktai">
+        <a class="mygtukas" href="https://ig.me/m/deimante_living" target="_blank" rel="noopener">Rašyk Instagram</a>
+        <button class="mygtukas mygtukas--tamsus" type="button" data-kopijuoti="deimante.baltrusiene@gmail.com">Nukopijuok el. paštą</button>
       </div>
-      <aside class="konsultacija__kaina" aria-label="Konsultacijos kaina">
-        <div class="robotukai robotukai--mazi" data-robotukai="3" aria-hidden="true"></div>
-        <p class="konsultacija__suma">150 €</p>
-        <p class="konsultacija__laikas">už valandą</p>
-        <p class="konsultacija__klausimai">Užsiregistruoti ar paklausti gali taip, kaip tau patogiau. Atsakau visiems ir greitai. Paspaudus el. paštą, jis nusikopijuoja.</p>
-        <div class="konsultacija__kontaktai">
-          <a class="mygtukas" href="https://ig.me/m/deimante_living" target="_blank" rel="noopener">Rašyk Instagram</a>
-          <button class="mygtukas mygtukas--sviesus" type="button" data-kopijuoti="deimante.baltrusiene@gmail.com">deimante.baltrusiene@gmail.com</button>
-        </div>
-      </aside>
     </div>
   </section>
 
 </main>
 
 <footer class="apacia">
-  <div class="apacia__vidus">
-    <p class="apacia__antraste">Parašyk, jei nori dirbti kartu</p>
-    <p>Mokymai, konsultacija ar tiesiog klausimas, nuo ko pradėti.</p>
-    <div class="apacia__nuorodos">
-      <button class="mygtukas mygtukas--sviesus" type="button" data-kopijuoti="deimante.baltrusiene@gmail.com">deimante.baltrusiene@gmail.com</button>
-      <a class="mygtukas mygtukas--sviesus" href="https://www.instagram.com/deimante_living/" target="_blank" rel="noopener">Instagram</a>
-    </div>
-    <p class="apacia__parasas">DEIMANTE_LIVING · © 2026</p>
+  <p class="apacia__antraste">Parašyk, jei nori dirbti kartu</p>
+  <p>Mokymai, konsultacija ar tiesiog klausimas, nuo ko pradėti.</p>
+  <div class="apacia__nuorodos">
+    <a class="mygtukas mygtukas--konturas" href="https://www.instagram.com/deimante_living/" target="_blank" rel="noopener">Instagram</a>
+    <button class="mygtukas mygtukas--konturas" type="button" data-kopijuoti="deimante.baltrusiene@gmail.com">Nukopijuok el. paštą</button>
   </div>
+  <p class="apacia__parasas">DEIMANTE_LIVING</p>
 </footer>
 
 <template id="robotukas">
-  <span class="bot">
-    <span class="bot__seselis"></span>
-    <svg class="bot__kunas" viewBox="0 0 22 18" fill="none">
-      <rect x="0" y="5" width="3" height="4" fill="#c8724c"/>
-      <rect x="19" y="5" width="3" height="4" fill="#c8724c"/>
-      <rect x="5" y="12" width="4" height="6" fill="#c8724c"/>
-      <rect x="13" y="12" width="4" height="6" fill="#c8724c"/>
-      <rect x="3" y="1" width="16" height="11" fill="#e07b06"/>
-      <g class="bot__akys" fill="#0e0d0d"><rect x="6" y="4" width="3" height="3"/><rect x="13" y="4" width="3" height="3"/></g>
-    </svg>
-  </span>
+  <img class="robotas__koja robotas__koja--0" src="media/robotukas/koja0.webp?v=3" width="54" height="103" alt="" draggable="false">
+  <img class="robotas__koja robotas__koja--1" src="media/robotukas/koja1.webp?v=3" width="55" height="103" alt="" draggable="false">
+  <img class="robotas__koja robotas__koja--2" src="media/robotukas/koja2.webp?v=3" width="55" height="103" alt="" draggable="false">
+  <img class="robotas__koja robotas__koja--3" src="media/robotukas/koja3.webp?v=3" width="56" height="103" alt="" draggable="false">
+  <img class="robotas__kunas" src="media/robotukas/kunas.webp?v=3" width="640" height="447" alt="" draggable="false">
 </template>
 
-<script src="main.js?v=2026-11-11e"></script>
+<script src="main.js?v=stalas-8"></script>
 </body>
 </html>
