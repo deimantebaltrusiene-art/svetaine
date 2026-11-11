@@ -147,3 +147,97 @@ document.querySelectorAll('[data-kopijuoti]').forEach(mygtukas => {
     setTimeout(() => { mygtukas.textContent = tekstas; }, 2000);
   });
 });
+
+// ---- Reels montažas: paspaudus prašymą, jis išsirašo terminale, o telefone atsiranda tas efektas ----
+const reels = document.querySelector('.reels');
+if (reels) {
+  const mygtukai = [...reels.querySelectorAll('[data-efektas-video]')];
+  const ivestis = reels.querySelector('[data-ivestis]');
+  const atsakymas = reels.querySelector('[data-atsakymas]');
+  const pavadinimas = reels.querySelector('[data-efektas]');
+  let [rodomas, kitas] = reels.querySelectorAll('.telefonas__video');
+  const kelias = v => `media/efektai/${v}.mp4`;
+  let matosi = false, paliete = false, eile = 0, ratas = null;
+
+  const paleisk = v => { if (!ramiai && matosi) v.play().catch(() => {}); };
+
+  function parodykVideo(vardas) {
+    // kitas video uždengia dabartinį ir atsiveria nuo apačios
+    const naujas = kitas, senas = rodomas;
+    naujas.classList.remove('rodomas');
+    naujas.classList.add('virsuje');
+    rodomas.classList.remove('virsuje', 'rodomas');
+    naujas.poster = `media/efektai/${vardas}.jpg`;
+    naujas.src = kelias(vardas);
+    naujas.preload = 'auto';
+    const atverk = () => {
+      paleisk(naujas);
+      naujas.getBoundingClientRect();
+      naujas.classList.add('rodomas');
+      setTimeout(() => { if (senas !== rodomas) senas.pause(); }, 750);
+    };
+    if (ramiai || naujas.readyState >= 2) atverk();
+    else naujas.addEventListener('loadeddata', atverk, { once: true });
+    kitas = rodomas;
+    rodomas = naujas;
+  }
+
+  let rasymas = 0;
+  function pasirink(mygtukas) {
+    mygtukai.forEach(m => m.setAttribute('aria-pressed', String(m === mygtukas)));
+    eile = mygtukai.indexOf(mygtukas);
+    // telefone prašymai vienoje eilutėje: pasirinktas prašymas atslenka į matomą vietą
+    const juosta = mygtukas.closest('ul');
+    if (juosta.scrollWidth > juosta.clientWidth) {
+      juosta.scrollTo({ left: juosta.scrollLeft + mygtukas.getBoundingClientRect().left - juosta.getBoundingClientRect().left - 16, behavior: ramiai ? 'auto' : 'smooth' });
+    }
+    const tekstas = mygtukas.textContent.trim();
+    const baigta = () => {
+      atsakymas.classList.remove('dirba');
+      atsakymas.textContent = '✓ Padaryta: ' + mygtukas.dataset.atsakymas;
+      pavadinimas.textContent = mygtukas.dataset.pavadinimas;
+      parodykVideo(mygtukas.dataset.efektasVideo);
+    };
+    const sis = ++rasymas;
+    if (ramiai) { ivestis.textContent = tekstas; baigta(); return; }
+    ivestis.textContent = '';
+    atsakymas.classList.add('dirba');
+    atsakymas.textContent = 'Dirbu…';
+    [...tekstas].forEach((raide, i) => setTimeout(() => {
+      if (sis === rasymas) ivestis.textContent += raide;
+    }, i * 26));
+    setTimeout(() => { if (sis === rasymas) baigta(); }, tekstas.length * 26 + 380);
+  }
+
+  mygtukai.forEach(m => m.addEventListener('click', () => {
+    paliete = true;
+    clearInterval(ratas);
+    pasirink(m);
+  }));
+
+  // Kol žmogus nieko nespaudžia, prašymai keičiasi patys
+  const sukis = () => {
+    clearInterval(ratas);
+    if (ramiai || paliete) return;
+    ratas = setInterval(() => pasirink(mygtukai[(eile + 1) % mygtukai.length]), 6500);
+  };
+
+  if ('IntersectionObserver' in window) {
+    // pirmas video kraunamas tik priartėjus prie skyriaus
+    const krovejas = new IntersectionObserver(irasai => {
+      if (!irasai[0].isIntersecting) return;
+      krovejas.disconnect();
+      rodomas.src = kelias(mygtukai[eile].dataset.efektasVideo);
+      rodomas.preload = 'auto';
+      paleisk(rodomas);
+    }, { rootMargin: '400px' });
+    krovejas.observe(reels);
+
+    new IntersectionObserver(irasai => {
+      matosi = irasai[0].isIntersecting;
+      if (matosi) { paleisk(rodomas); sukis(); }
+      else { rodomas.pause(); clearInterval(ratas); }
+    }, { threshold: 0.3 }).observe(reels.querySelector('.reels__vidus'));
+  }
+  eile = Math.max(0, mygtukai.findIndex(m => m.getAttribute('aria-pressed') === 'true'));
+}
