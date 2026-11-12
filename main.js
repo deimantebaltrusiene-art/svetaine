@@ -56,6 +56,7 @@ if (scena) {
     { id: 'karusele', prasymas: 'sudėk karuselę iš mano nuotraukų', atsakymas: '✓ karuselė paruošta, padėjau ant stalo' },
     { id: 'zinutes', prasymas: 'atsakyk visiems, kurie parašė GIDAS', atsakymas: '✓ visiems išsiųsta nuoroda' },
   ];
+  const REELS = 'media/efektai2/ka-pasakau.mp4';
   let matosi = false, vyksta = false;
 
   const eilute = (klase, tekstas = '') => {
@@ -72,8 +73,13 @@ if (scena) {
   function ivykdyk(id) {
     uzduotys[id]?.classList.add('atlikta');
     if (id === 'reels') {
-      if (!telefonas.src) telefonas.src = 'media/efektai/01-kabliukas-uz-galvos.mp4';
-      if (!ramiai) telefonas.play().catch(() => {});
+      if (!telefonas.src) telefonas.src = REELS;
+      telefonoDaiktas.classList.add('sumontuota');
+      if (!ramiai) {
+        telefonas.currentTime = 0;
+        telefonas.play().catch(() => {});
+        telefonoDaiktas.animate([{ scale: '1' }, { scale: '1.08' }, { scale: '1' }], { duration: 650, easing: 'cubic-bezier(.16,1,.3,1)' });
+      }
     }
     if (lapai[id]) lapai[id].classList.add('islenda');
     if (id === 'zinutes' && telefonoDaiktas && !ramiai) {
@@ -88,6 +94,8 @@ if (scena) {
       terminalas.textContent = '';
       Object.values(uzduotys).forEach(u => u.classList.remove('atlikta'));
       Object.values(lapai).forEach(l => l.classList.remove('islenda'));
+      telefonoDaiktas.classList.remove('sumontuota');
+      telefonas.pause();
       await lauk(700);
       for (const darbas of DARBAI) {
         if (!matosi) break;
@@ -116,7 +124,9 @@ if (scena) {
   } else {
     kaiMatosi(scena, () => {
       matosi = true;
-      if (telefonas.src) telefonas.play().catch(() => {});
+      // reels pasikrauna iš anksto, kad po „sumontuotas“ iškart grotų
+      if (!telefonas.src) { telefonas.preload = 'auto'; telefonas.src = REELS; }
+      if (telefonoDaiktas.classList.contains('sumontuota')) telefonas.play().catch(() => {});
       ciklas();
     }, () => { matosi = false; telefonas.pause(); }, 0.25);
   }
@@ -201,19 +211,25 @@ if (reels) {
   const atsakymas = reels.querySelector('[data-atsakymas]');
   const pavadinimas = reels.querySelector('[data-efektas]');
   let [rodomas, kitas] = reels.querySelectorAll('.efektas');
-  const kelias = v => `media/efektai/${v}.mp4`;
+  const kelias = v => `media/efektai2/${v}.mp4`;
   let matosi = false, paliete = false, ratas = null;
   let eile = Math.max(0, lapeliai.findIndex(m => m.getAttribute('aria-pressed') === 'true'));
   const paleisk = v => { if (!ramiai && matosi) v.play().catch(() => {}); };
 
+  let keitimas = 0;
   function parodyk(vardas) {
     const naujas = kitas, senas = rodomas;
     naujas.classList.remove('rodomas');
     naujas.classList.add('virsuje');
     senas.classList.remove('virsuje', 'rodomas');
-    naujas.poster = `media/efektai/${vardas}.jpg`;
+    naujas.poster = `media/efektai2/${vardas}.jpg`;
     naujas.src = kelias(vardas);
+    // be šito naršyklė naujo video nekrauna (preload="none"), ir telefone likdavo senas efektas
+    naujas.preload = 'auto';
+    naujas.load();
+    const sis = ++keitimas;
     const atverk = () => {
+      if (sis !== keitimas) return;
       paleisk(naujas);
       void naujas.offsetWidth;
       naujas.classList.add('rodomas');
@@ -251,21 +267,25 @@ if (reels) {
   }
 }
 
-// ---------- 5. Atsiliepimai: žinutes galima pastumdyti, paspaudus atsidaro visa ----------
-const langas = document.querySelector('.zinute');
-if (langas) {
-  const vaizdas = langas.querySelector('img');
-  document.querySelectorAll('[data-zinute]').forEach(lapas => {
-    tempiamas(lapas, () => {
-      vaizdas.src = lapas.dataset.zinute;
-      vaizdas.width = lapas.dataset.w;
-      vaizdas.height = lapas.dataset.h;
-      langas.showModal();
-      langas.scrollTop = 0;
+// ---------- 5. Atsiliepimai: pirmi devyni matosi, kiti po paspaudimo ----------
+const daugiau = document.querySelector('[data-daugiau-mygtukas]');
+if (daugiau) {
+  // telefone pradžioje tik keturi, kad nereikėtų ilgai slinkti
+  if (window.matchMedia('(max-width: 820px)').matches) {
+    [...document.querySelectorAll('.laiskas')].slice(4).forEach(l => { l.hidden = true; l.dataset.daugiau = ''; });
+  }
+  const liko = document.querySelectorAll('[data-daugiau]').length;
+  daugiau.textContent = `Skaityti dar ${liko} atsiliepim${liko % 10 === 1 && liko % 100 !== 11 ? 'ą' : (liko % 10 === 0 || (liko % 100 > 10 && liko % 100 < 20)) ? 'ų' : 'us'}`;
+  daugiau.addEventListener('click', () => {
+    const paslepti = [...document.querySelectorAll('[data-daugiau]')];
+    paslepti.forEach((l, k) => {
+      l.hidden = false;
+      if (!ramiai) { l.style.animationDelay = k * 70 + 'ms'; l.classList.add('atsiranda'); }
     });
+    daugiau.parentElement.remove();
+    paslepti[0]?.querySelector('blockquote')?.setAttribute('tabindex', '-1');
+    paslepti[0]?.querySelector('blockquote')?.focus({ preventScroll: true });
   });
-  langas.querySelector('.zinute__uzdaryti').addEventListener('click', () => langas.close());
-  langas.addEventListener('click', e => { if (e.target === langas) langas.close(); });
 }
 
 // ---------- 6. Moduliai: paspaudus parodoma, ką po jo pasakysi Claude Code ----------
@@ -293,136 +313,85 @@ if (prasymas) {
   });
 }
 
-// ---------- 7. Kaina: robotukai nuspiria seną kainą ----------
-const kainosScena = document.querySelector('[data-kaina]');
-if (kainosScena) {
-  const drobe = kainosScena.querySelector('canvas');
-  const x = drobe.getContext('2d');
-  const suma = kainosScena.querySelector('.kaina__suma');
-  const nauja = kainosScena.querySelector('.kaina__nauja');
-  const KOJOS = [{ x: 119, w: 54 }, { x: 197.7, w: 55 }, { x: 389.8, w: 55 }, { x: 466.8, w: 56 }];
-  const pav = src => new Promise(ok => { const i = new Image(); i.onload = () => ok(i); i.src = src; });
-  const tarp = (a, b, p) => a + (b - a) * p;
-  const lygu = (a, b, t) => Math.min(1, Math.max(0, (t - a) / (b - a)));
-  const isej = p => 1 - Math.pow(1 - p, 3);
-  let R = null, W = 0, H = 0, dpr = 1;
-
-  const dydis = () => {
-    dpr = Math.min(2, window.devicePixelRatio || 1);
-    W = kainosScena.clientWidth; H = kainosScena.clientHeight;
-    drobe.width = W * dpr; drobe.height = H * dpr;
+// ---------- 7. Kas mokymuose: pamokos pavyzdys, promptas, skilsai ----------
+const pamoka = document.querySelector('[data-pamoka]');
+if (pamoka) {
+  const eilutes = pamoka.querySelector('[data-pamokos-eilutes]');
+  const mygtukas = pamoka.querySelector('[data-pamokos-mygtukas]');
+  const juosta = pamoka.querySelector('[data-pamokos-juosta]');
+  const EIGA = [
+    ['balsas', 'Įmesk nufilmuotą video į aplanką ir parašyk taip:'],
+    ['prasymas', 'sumontuok šitą reels su subtitrais'],
+    ['dirba', 'dirbu…'],
+    ['atlikta', '✓ iškirpau pauzes'],
+    ['atlikta', '✓ subtitrai tavo šriftu ir spalvomis'],
+    ['atlikta', '✓ reels.mp4 paruoštas'],
+    ['balsas', 'Matai? Dabar pabandyk pati ar pats.'],
+  ];
+  let groja = false, kartas = 0, matosi = false;
+  const rodyk = (iki, eiga) => {
+    eilutes.textContent = '';
+    EIGA.slice(0, iki).forEach(([k, t]) => { const p = document.createElement('p'); p.className = k; p.textContent = t; eilutes.appendChild(p); });
+    juosta.style.setProperty('--eiga', eiga);
   };
-
-  function robotukas(cx, pedos, pl, o = {}) {
-    const S = pl / 640, faze = o.eisena;
-    const sup = faze == null ? 0 : Math.abs(Math.sin(faze)) * 14;
-    x.save();
-    x.globalAlpha = 0.35 * Math.max(0.3, 1 - (o.sok || 0) / pl);
-    x.fillStyle = '#06110c';
-    x.beginPath(); x.ellipse(cx + pl * 0.06, pedos + pl * 0.02, pl * 0.38, pl * 0.05, 0, 0, Math.PI * 2); x.fill();
-    x.restore();
-    x.save();
-    x.translate(cx, pedos - (o.sok || 0));
-    x.scale(S, S);
-    x.translate(-320, -448);
-    KOJOS.forEach((k, i) => {
-      const pak = faze == null ? 0 : Math.max(0, Math.sin(faze + (i % 2 ? Math.PI : 0))) * 46;
-      x.save();
-      if (i === 3 && o.spyris) {
-        x.translate(k.x + k.w / 2, 352 - sup); x.rotate(-o.spyris);
-        x.drawImage(R.kojos[i], -k.w / 2, -8);
-      } else {
-        x.beginPath(); x.rect(0, 352 - sup, 640, 200); x.clip();
-        x.drawImage(R.kojos[i], k.x, 344.7 - pak - sup * 0.2);
-      }
-      x.restore();
-    });
-    x.drawImage(R.kunas, 0, -sup);
-    x.restore();
-  }
-
-  function piesk(t) {
-    x.setTransform(dpr, 0, 0, dpr, 0, 0);
-    x.clearRect(0, 0, W, H);
-    // telefone kaina viršuje, o robotukai vaikšto po ja
-    const siauras = W < 620;
-    const pl = siauras ? Math.min(84, W * 0.2) : Math.min(150, Math.max(78, W * 0.12));
-    const pedos = H * (siauras ? 0.95 : 0.8);
-    const kainosY = siauras ? H * 0.56 : pedos;
-    const cx = W / 2;
-    const pw = Math.min(suma.offsetWidth || W * 0.4, W - pl * 1.2);
-    const sriftas = parseFloat(getComputedStyle(nauja).fontSize);
-    const tiksl = siauras
-      ? [cx, cx - pl * 1.2, cx + pl * 1.2]
-      : [cx - pw / 2 - pl * 0.75, cx - pw / 2 - pl * 1.95, cx + pw / 2 + pl * 0.75];
-
-    // sena kaina stovi, kol ją nuspiria, tada nuskrenda
-    const smugis = 2.05;
-    if (t < 3.2) {
-      const p = lygu(smugis, 3.1, t);
-      x.save();
-      x.globalAlpha = 1 - p;
-      x.translate(cx + p * W * 0.45, kainosY - Math.sin(p * Math.PI) * H * 0.35);
-      x.rotate(p * 1.6);
-      x.font = `400 ${sriftas * 0.82}px "Bebas Neue"`;
-      x.textAlign = 'center';
-      x.fillStyle = '#efe6dd';
-      x.shadowColor = 'rgba(4,14,9,.5)'; x.shadowBlur = 20; x.shadowOffsetY = 8;
-      x.fillText('147 €', 0, 0);
-      x.restore();
+  const groti = async () => {
+    const sis = ++kartas;
+    groja = true;
+    pamoka.classList.add('groja');
+    mygtukas.setAttribute('aria-label', 'Sustabdyti pamokos pavyzdį');
+    for (let i = 1; i <= EIGA.length; i++) {
+      if (sis !== kartas) return;
+      rodyk(i, i / EIGA.length);
+      await lauk(EIGA[i - 1][0] === 'balsas' ? 1900 : 1100);
     }
-
-    tiksl.forEach((galas, k) => {
-      // pirmi du atžygiuoja iki kainos, trečias palaukia ir po smūgio nueina į kitą pusę
-      let pozicija, eisena = null, spyris = 0, sok = 0;
-      const pirmas = tiksl[0];
-      if (k < 2) {
-        const p = lygu(0.2 + k * 0.15, 1.9, t);
-        pozicija = tarp(-pl * (1.5 + k), galas, isej(p));
-        if (p > 0 && p < 1) eisena = t * 13 + k;
-      } else {
-        const p1 = lygu(0.1, 1.7, t), p2 = lygu(2.6, 3.9, t);
-        const laukia = pirmas - pl * 2.3;
-        pozicija = t < 2.6 ? tarp(-pl * 4, laukia, isej(p1)) : tarp(laukia, galas, isej(p2));
-        if ((p1 > 0 && p1 < 1) || (p2 > 0 && p2 < 1)) eisena = t * 13;
-      }
-      if (k === 0) spyris = Math.max(0, lygu(1.85, 2.05, t) - lygu(2.15, 2.6, t)) * 1.1;
-      // kai atsiranda nauja kaina, visi pašoka, paskui kartais po vieną
-      const st = t - 4.0 - k * 0.12;
-      if (st > 0 && st < 1.3) sok = Math.abs(Math.sin(st * Math.PI * 1.55)) * pl * 0.32 * (1 - st / 1.3);
-      const ritmas = (t - 6 - k * 1.7) % 5.2;
-      if (t > 6 && ritmas > 0 && ritmas < 0.55) sok = Math.sin(ritmas / 0.55 * Math.PI) * pl * 0.22;
-      robotukas(pozicija, pedos, pl, { eisena, spyris, sok });
-    });
-  }
-
-  let pradzia = null, kadras = null, sustota = 0;
-  const suktis = laikas => {
-    if (pradzia == null) pradzia = laikas;
-    const t = (laikas - pradzia) / 1000;
-    if (t > 3.75) kainosScena.classList.remove('laukia');
-    piesk(t);
-    kadras = requestAnimationFrame(suktis);
+    await lauk(2600);
+    if (sis === kartas && matosi) groti(); else if (sis === kartas) sustok();
   };
+  const sustok = () => {
+    kartas++; groja = false;
+    pamoka.classList.remove('groja');
+    mygtukas.setAttribute('aria-label', 'Paleisti pamokos pavyzdį');
+  };
+  rodyk(ramiai ? EIGA.length : 1, ramiai ? 1 : 0);
+  mygtukas.addEventListener('click', () => (groja ? sustok() : groti()));
+  if (!ramiai) kaiMatosi(pamoka, () => { matosi = true; if (!groja) groti(); }, () => { matosi = false; sustok(); }, 0.5);
+}
 
-  (async () => {
-    const [kunas, ...kojos] = await Promise.all(['kunas', 'koja0', 'koja1', 'koja2', 'koja3'].map(f => pav(`media/robotukas/${f}.webp?v=3`)));
-    R = { kunas, kojos };
-    await document.fonts?.load('400 100px "Bebas Neue"', '147 € š').catch(() => {});
-    dydis();
-    window.addEventListener('resize', () => { dydis(); if (!kadras) piesk(ramiai ? 9 : 0); });
-    if (ramiai || !('IntersectionObserver' in window)) { piesk(9); return; }
-    kainosScena.classList.add('laukia');
-    piesk(0);
-    kaiMatosi(kainosScena, () => {
-      if (kadras) return;
-      if (pradzia != null) pradzia += performance.now() - sustota;
-      kadras = requestAnimationFrame(suktis);
-    }, () => {
-      if (!kadras) return;
-      cancelAnimationFrame(kadras); kadras = null; sustota = performance.now();
-    }, 0.5);
-  })();
+const promptoMygtukas = document.querySelector('[data-kopijuoti-prompta]');
+if (promptoMygtukas) {
+  const tekstas = document.querySelector('[data-promptas]').textContent.trim();
+  promptoMygtukas.addEventListener('click', async () => {
+    try {
+      await navigator.clipboard.writeText(tekstas);
+      promptoMygtukas.textContent = 'Nukopijuota ✓';
+    } catch {
+      promptoMygtukas.textContent = 'Pažymėk ir kopijuok';
+    }
+    setTimeout(() => { promptoMygtukas.textContent = 'Nukopijuok'; }, 2200);
+  });
+}
+
+const skilsoFailas = document.querySelector('[data-skilso-failas]');
+if (skilsoFailas) {
+  const SKILSAI = {
+    mokytojas: ['mokytojas', 'aiškink kaip mentorė,\n  žingsnis po žingsnio, paprastai.', ['mokausi ką nors nauja', 'prašau paaiškinti, kaip veikia']],
+    reels: ['reels-efektai', 'sumontuok mano reels su efektais,\n  lietuviškai ir mano stiliumi.', ['sakau „sumontuok su efektais“', 'įmetu naują video']],
+    logika: ['logikos-patikra', 'patikrink scenarijų ar tekstą\n  dėl loginių klaidų prieš skelbiant.', ['parašiau scenarijų ar promptą', 'ruošiu tekstą karuselei']],
+  };
+  const auseles = [...document.querySelectorAll('[data-skilsas]')];
+  const parodyk = raktas => {
+    const [vardas, aprasas, kada] = SKILSAI[raktas];
+    skilsoFailas.innerHTML = '';
+    const eil = (t, klase) => { const sp = document.createElement('span'); if (klase) sp.className = klase; sp.textContent = t; skilsoFailas.append(sp); };
+    eil('---\n'); eil('name: ', 'raktas'); eil(vardas + '\n'); eil('description: ', 'raktas'); eil(aprasas + '\n---\n');
+    eil('# Kada naudoti\n', 'antr'); eil(kada.map(k => '- ' + k).join('\n'));
+    if (!ramiai) skilsoFailas.animate([{ opacity: 0, translate: '0 6px' }, { opacity: 1, translate: '0 0' }], { duration: 350, easing: 'cubic-bezier(.16,1,.3,1)' });
+  };
+  auseles.forEach(a => a.addEventListener('click', () => {
+    auseles.forEach(k => k.setAttribute('aria-selected', String(k === a)));
+    parodyk(a.dataset.skilsas);
+  }));
+  parodyk('mokytojas');
 }
 
 // ---------- El. paštas nusikopijuoja, o ne atidaro pašto programą ----------
