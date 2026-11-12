@@ -578,8 +578,8 @@ section[id] { scroll-margin-top: calc(var(--juostos-aukstis) + 16px); }
 .pamoka__eilutes .atlikta { color: #a8c9b0; }
 .pamoka__valdymas { display: flex; align-items: center; gap: 12px; padding: 10px 4px 2px; }
 .pamoka__groti { flex: none; display: grid; place-items: center; width: 40px; height: 40px; border: 0; border-radius: 50%; background: var(--oranz); cursor: pointer; }
-.pamoka__groti span { width: 0; height: 0; margin-left: 3px; border-left: 12px solid var(--juoda); border-top: 8px solid transparent; border-bottom: 8px solid transparent; }
-.pamoka.groja .pamoka__groti span { width: 12px; height: 14px; margin: 0; border: 0; border-left: 4px solid var(--juoda); border-right: 4px solid var(--juoda); }
+.pamoka__groti span { width: 12px; height: 16px; margin-left: 3px; background: var(--juoda); clip-path: polygon(0 0, 100% 50%, 0 100%); }
+.pamoka.groja .pamoka__groti span { width: 12px; height: 14px; margin: 0; background: linear-gradient(90deg, var(--juoda) 0 4px, transparent 4px 8px, var(--juoda) 8px); clip-path: none; }
 .pamoka__juosta { flex: 1; height: 4px; overflow: hidden; border-radius: 2px; background: rgba(239, 230, 221, 0.18); }
 .pamoka__juosta span { display: block; width: 100%; height: 100%; background: var(--oranz); transform-origin: left; scale: var(--eiga, 0) 1; }
 
