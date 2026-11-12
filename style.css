@@ -597,9 +597,15 @@ section[id] { scroll-margin-top: calc(var(--juostos-aukstis) + 16px); }
 .skilsas__failas .raktas { color: #b0542c; }
 .skilsas__failas .antr { font-weight: 700; }
 
+.pasiulymas {
+  display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+  gap: clamp(2rem, 5vw, 4.5rem); align-items: center;
+  max-width: 64rem; margin: clamp(4rem, 8vw, 6.5rem) auto 0;
+}
+.nuotrauka--akiniai { max-width: 360px; rotate: -4deg; }
 .viduje__lapas {
-  max-width: 42rem;
-  margin: clamp(3rem, 6vw, 5rem) auto 0;
+  position: relative;
+  margin: 0;
   padding: clamp(22px, 3.5vw, 40px);
   background: var(--kremas);
   color: var(--juoda);
@@ -612,6 +618,14 @@ section[id] { scroll-margin-top: calc(var(--juostos-aukstis) + 16px); }
 .viduje__gauni li { position: relative; padding-left: 1.9rem; }
 .viduje__gauni li::before { content: "✓"; position: absolute; left: 0; top: 0; font-weight: 700; color: #c4602f; }
 .viduje__gidas { margin-top: 1.4rem; font-size: 0.95rem; }
+.viduje__ivadas { margin-bottom: 0.8rem; font-weight: 600; }
+/* robotukai vaikšto ant kortelės viršaus */
+.lapo-robotai { position: absolute; left: 0; right: 0; bottom: 100%; height: 0; pointer-events: none; }
+.lapo-robotai .robotas { position: absolute; left: 0; bottom: -4px; width: clamp(54px, 6vw, 74px); }
+
+/* atsiliepimai sudėlioti stulpeliais be skylių (main.js) */
+.laiskai.murai { display: grid; grid-template-columns: repeat(var(--stulpeliai), minmax(0, 1fr)); grid-auto-rows: 4px; column-gap: clamp(18px, 2.4vw, 30px); columns: auto; }
+.laiskai.murai .laiskas { margin-bottom: 0; align-self: start; }
 
 /* ---------- 8. Klausimai ---------- */
 .duk { max-width: 52rem; margin: 0 auto; padding: clamp(3rem, 7vw, 6rem) var(--krastas); }
@@ -700,6 +714,8 @@ section[id] { scroll-margin-top: calc(var(--juostos-aukstis) + 16px); }
   .lapeliai button, .lapeliai button[aria-pressed="true"], .lapeliai button:hover { width: auto; white-space: nowrap; translate: 0 0; }
   .lapeliai button[aria-pressed="true"] { translate: 0 -6px; }
   .moduliai { grid-template-columns: minmax(0, 1fr); }
+  .pasiulymas { grid-template-columns: minmax(0, 1fr); gap: 4.5rem; }
+  .nuotrauka--akiniai { max-width: 240px; }
   .viduje__lapas .mygtukas { width: 100%; }
   .turinys-lapas { rotate: 0deg; }
   .konsultacija { grid-template-columns: minmax(0, 1fr); }

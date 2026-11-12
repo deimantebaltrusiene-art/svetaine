@@ -267,6 +267,46 @@ if (reels) {
   }
 }
 
+// ---------- Atsiliepimai sudėliojami stulpeliais taip, kad apačioje neliktų skylių ----------
+const siena = document.querySelector('.laiskai');
+let sudeliok = () => {};
+if (siena) {
+  const EIL = 4;
+  let aukstis = [];
+  const stulpeliu = () => { const p = siena.clientWidth; return p >= 900 ? 3 : p >= 580 ? 2 : 1; };
+  const padek = sarasas => {
+    const tarpas = parseFloat(getComputedStyle(siena).columnGap) || 24;
+    // ilgiausios pirma: taip stulpeliai baigiasi beveik vienoje linijoje
+    sarasas.map(l => [l, l.offsetHeight]).sort((a, b) => b[1] - a[1]).forEach(([l, h]) => {
+      const k = aukstis.indexOf(Math.min(...aukstis));
+      const kiek = Math.ceil((h + tarpas) / EIL);
+      l.style.gridColumn = String(k + 1);
+      l.style.gridRow = `${aukstis[k] / EIL + 1} / span ${kiek}`;
+      aukstis[k] += kiek * EIL;
+    });
+  };
+  sudeliok = papildyti => {
+    const n = stulpeliu();
+    const rodomi = [...siena.children].filter(l => !l.hidden);
+    if (n === 1) {
+      siena.classList.remove('murai');
+      [...siena.children].forEach(l => { l.style.gridColumn = ''; l.style.gridRow = ''; });
+      aukstis = [];
+      return;
+    }
+    siena.classList.add('murai');
+    siena.style.setProperty('--stulpeliai', n);
+    if (papildyti && aukstis.length === n) { padek(rodomi.filter(l => !l.style.gridRow)); return; }
+    aukstis = Array(n).fill(0);
+    rodomi.forEach(l => { l.style.gridColumn = '1'; l.style.gridRow = 'auto'; });
+    padek(rodomi);
+  };
+  sudeliok();
+  document.fonts?.ready.then(() => sudeliok());
+  let laikas;
+  window.addEventListener('resize', () => { clearTimeout(laikas); laikas = setTimeout(() => sudeliok(), 150); });
+}
+
 // ---------- 5. Atsiliepimai: pirmi devyni matosi, kiti po paspaudimo ----------
 const daugiau = document.querySelector('[data-daugiau-mygtukas]');
 if (daugiau) {
@@ -282,6 +322,7 @@ if (daugiau) {
       l.hidden = false;
       if (!ramiai) { l.style.animationDelay = k * 70 + 'ms'; l.classList.add('atsiranda'); }
     });
+    sudeliok(true);
     daugiau.parentElement.remove();
     paslepti[0]?.querySelector('blockquote')?.setAttribute('tabindex', '-1');
     paslepti[0]?.querySelector('blockquote')?.focus({ preventScroll: true });
@@ -392,6 +433,45 @@ if (skilsoFailas) {
     parodyk(a.dataset.skilsas);
   }));
   parodyk('mokytojas');
+}
+
+// ---------- Robotukai vaikšto ant mokymų kortelės, prie mygtuko pašoka ----------
+const lapoRobotai = document.querySelector('[data-lapo-robotai]');
+if (lapoRobotai) {
+  const rob = [...lapoRobotai.querySelectorAll('.lapo-robotai .robotas')];
+  const max = r => Math.max(0, lapoRobotai.clientWidth - r.offsetWidth);
+  const poz = rob.map((r, k) => [0.06, 0.46, 0.84][k] * max(r));
+  rob.forEach((r, k) => { r.style.transform = `translateX(${poz[k]}px)`; });
+  const pasok = r => {
+    if (ramiai) return;
+    r.classList.remove('soka'); void r.offsetWidth; r.classList.add('soka');
+  };
+  rob.forEach(r => r.addEventListener('animationend', e => { if (e.target === r) r.classList.remove('soka'); }));
+  const mygt = lapoRobotai.querySelector('.mygtukas');
+  ['mouseenter', 'focus'].forEach(ev => mygt.addEventListener(ev, () => rob.forEach((r, k) => setTimeout(() => pasok(r), k * 90))));
+  if (!ramiai) {
+    let matosi = false, pradeta = false;
+    const eik = async (r, k) => {
+      await lauk(k * 700);
+      for (;;) {
+        if (!matosi) { await lauk(700); continue; }
+        const iki = Math.random() * max(r);
+        const trukme = Math.max(500, Math.abs(iki - poz[k]) / 70 * 1000);
+        r.classList.add('eina');
+        const a = r.animate([{ transform: `translateX(${poz[k]}px)` }, { transform: `translateX(${iki}px)` }], { duration: trukme, easing: 'linear', fill: 'forwards' });
+        await a.finished;
+        a.commitStyles(); a.cancel();
+        poz[k] = iki;
+        r.classList.remove('eina');
+        if (Math.random() < 0.45) pasok(r);
+        await lauk(900 + Math.random() * 2600);
+      }
+    };
+    kaiMatosi(lapoRobotai, () => {
+      matosi = true;
+      if (!pradeta) { pradeta = true; rob.forEach(eik); }
+    }, () => { matosi = false; }, 0.2);
+  }
 }
 
 // ---------- El. paštas nusikopijuoja, o ne atidaro pašto programą ----------

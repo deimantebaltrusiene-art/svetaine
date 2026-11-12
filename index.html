@@ -13,7 +13,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Newsreader:ital,opsz,wght@1,6..72,400&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
 <link rel="preload" as="image" href="media/stalas/kilimelis.webp">
-<link rel="stylesheet" href="style.css?v=stalas-14">
+<link rel="stylesheet" href="style.css?v=stalas-15">
 <!--
 THESIS: svetainė yra Deimantės darbo stalas iš viršaus. Ne skyrių kaladė su kortelėmis, o vienas stalas, ant kurio Claude Code komanda (oranžiniai robotukai) atlieka tikrus darbus.
 OWN-WORLD: gilios žalios veltinio kilimėlis per visą puslapį, tikri iškirpti daiktai su šešėliu į dešinę, kremo popieriaus lapai, oranžinė tik varnelėms, žymekliui ir mygtukui. Bebas, Poppins, Newsreader ranka rašytiems užrašams.
@@ -451,8 +451,17 @@ description: aiškink kaip mentorė,
       </li>
     </ul>
 
-    <div class="viduje__lapas">
+    <div class="pasiulymas">
+    <figure class="nuotrauka nuotrauka--akiniai">
+      <img src="media/akiniai.webp" width="800" height="1000" alt="Deimantė su oranžiniais akiniais, ant kurių parašyta CLAUDE CODE" loading="lazy">
+      <figcaption>Mokau taip, kaip dirbu pati</figcaption>
+    </figure>
+    <div class="viduje__lapas" data-lapo-robotai>
+      <div class="lapo-robotai" aria-hidden="true">
+        <span class="robotas"></span><span class="robotas"></span><span class="robotas"></span>
+      </div>
       <p class="viduje__pavadinimas">Tavo antroji dešinioji ranka: Claude Code nuo nulio</p>
+      <p class="viduje__ivadas">Prisijungus gauni:</p>
       <ul class="viduje__gauni">
         <li>14 modulių, kuriuose vaizdo pamokos, promptai ir skilsai sudėti vienoje vietoje.</li>
         <li>Prieigą prie mokymų visam laikui ir naujus modulius be papildomo mokesčio.</li>
@@ -461,6 +470,7 @@ description: aiškink kaip mentorė,
       </ul>
       <a class="mygtukas mygtukas--didelis" href="https://stan.store/deimante_living/p/tavo-antroji-deinioji-ranka" target="_blank" rel="noopener">Noriu išmokti ir aš</a>
       <p class="viduje__gidas">Dar neapsisprendei? <a class="nuoroda nuoroda--tamsi" href="https://stan.store/deimante_living/p/claude-code-tavo-antroji-deinioji-ranka" target="_blank" rel="noopener">Parsisiųsk nemokamą gidą</a></p>
+    </div>
     </div>
   </section>
 
@@ -534,6 +544,6 @@ description: aiškink kaip mentorė,
   <img class="robotas__kunas" src="media/robotukas/kunas.webp?v=3" width="640" height="447" alt="" draggable="false">
 </template>
 
-<script src="main.js?v=stalas-14"></script>
+<script src="main.js?v=stalas-15"></script>
 </body>
 </html>
